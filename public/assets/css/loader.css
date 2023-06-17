@@ -13,8 +13,6 @@ div#load_screen .loader {
     display: flex;
     justify-content: center;
     height: 100vh;
-    width: auto;
-    border: none;
 }
 div#load_screen .loader-content {
     right: 0;

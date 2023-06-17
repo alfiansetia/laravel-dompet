@@ -1,6 +1,3 @@
-.main-container {
-    min-height: auto;
-}
 .layout-px-spacing {
     min-height: auto!important;
 }
@@ -180,7 +177,7 @@
     margin: auto;
     width: 100%;
     overflow: auto;
-    height: calc(100vh - 242px);
+    height: calc(100vh - 224px);
 }
 .todo-inbox .todo-item {
     cursor: pointer;
@@ -197,7 +194,7 @@
 }
 .todo-inbox .todo-item .todo-item-inner .todo-heading {
     font-size: 18px;
-    font-weight: 700;
+    font-weight: 600;
     color: #515365;
     margin-bottom: 2px;
     -webkit-transition: all 0.35s ease;
@@ -217,7 +214,7 @@
     overflow: hidden!important;
     text-overflow: ellipsis!important;
     white-space: nowrap!important;
-    max-width: calc(100vw - 760px);
+    max-width: calc(100vw - 730px);
 }
 .todo-inbox .todo-item .todo-item-inner:hover .todo-text {
     -webkit-transform: translateY(0) scale(1.01);
@@ -365,6 +362,7 @@
     margin-right: 8px;
     width: 19px;
     height: 19px;
+    vertical-align: sub;
 }
 .compose-box .compose-content form svg {
     align-self: center;
@@ -436,7 +434,7 @@
         z-index: 4;
         left: -100px;
         width: 0;
-        border-right: none;
+        background: #fff;
     }
     .todo-inbox {
         -ms-flex: 0 0 100%;

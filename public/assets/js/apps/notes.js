@@ -152,29 +152,37 @@ var $_getValidationField = document.getElementsByClassName('validation-text');
 
 getNoteTitleInput = document.getElementById('n-title');
 
-getNoteTitleInput.addEventListener('input', function() {
+if ($(getNoteTitleInput).length) {
 
-    getNoteTitleInputValue = this.value;
+  getNoteTitleInput.addEventListener('input', function() {
 
-    if (getNoteTitleInputValue == "") {
-      $_getValidationField[0].innerHTML = 'Title Required';
-      $_getValidationField[0].style.display = 'block';
-    } else {
-      $_getValidationField[0].style.display = 'none';
-    }
-})
+      getNoteTitleInputValue = this.value;
+
+      if (getNoteTitleInputValue == "") {
+        $_getValidationField[0].innerHTML = 'Title Required';
+        $_getValidationField[0].style.display = 'block';
+      } else {
+        $_getValidationField[0].style.display = 'none';
+      }
+  })
+}
 
 getNoteDescriptionInput = document.getElementById('n-description');
 
-getNoteDescriptionInput.addEventListener('input', function() {
+if ($(getNoteDescriptionInput).length) {
 
-  getNoteDescriptionInputValue = this.value;
+  getNoteDescriptionInput.addEventListener('input', function() {
+    
 
-  if (getNoteDescriptionInputValue == "") {
-    $_getValidationField[1].innerHTML = 'Description Required';
-    $_getValidationField[1].style.display = 'block';
-  } else {
-    $_getValidationField[1].style.display = 'none';
-  }
+    getNoteDescriptionInputValue = this.value;
 
-})
+    if (getNoteDescriptionInputValue == "") {
+      $_getValidationField[1].innerHTML = 'Description Required';
+      $_getValidationField[1].style.display = 'block';
+    } else {
+      $_getValidationField[1].style.display = 'none';
+    }
+
+  })
+
+}

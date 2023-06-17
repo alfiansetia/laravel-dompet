@@ -25,7 +25,6 @@
     padding: 10px 16px;
     -webkit-box-shadow: 2px 5px 17px 0 rgba(31,45,61,.1);
     box-shadow: 2px 5px 17px 0 rgba(31,45,61,.1);
-    box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px, rgb(145 158 171 / 24%) 0px 16px 32px -4px;
 }
 #addListModal .compose-box .list-title input::-webkit-input-placeholder {
     color: #bfc9d4;
@@ -216,7 +215,7 @@
     padding: 15px;
     border-radius: 10px;
     border: 1px solid #d3d3d3;
-    background: rgb(226, 230, 234);
+        background: rgb(226, 230, 234);
 }
 .connect-sorting .task-container-header {
     display: flex;

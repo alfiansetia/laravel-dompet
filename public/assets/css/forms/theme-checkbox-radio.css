@@ -33,6 +33,7 @@
     opacity: 0.6;
     background-color: #e0e6ed;
     border: 1px solid #bfc9d4;
+    /* cursor: default; */
 }
 .new-control.new-checkbox { cursor: pointer; }
 .new-control.new-checkbox.disabled { cursor: default; }

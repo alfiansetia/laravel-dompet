@@ -1,5 +1,5 @@
 .widget-content-area { border: 1px solid #e0e6ed;
-    box-shadow: 0 0 40px 0 rgba(94,92,154,.06); }
+    box-shadow: 0 0 40px 0 rgb(94 92 154 / 6%); }
 .layout-spacing {
     padding-bottom: 25px;
 }
@@ -39,11 +39,11 @@
     position: absolute;
     content: "";
     height: 2px;
-    width: 38px;
+    width: 55px;
     background: #4361ee;
     border-radius: 50%;
     bottom: 9px;
-    left: 9px;
+    left: 15px;
 }
 .user-profile .widget-content-area .user-info { margin-top: 40px; }
 .user-profile .widget-content-area .user-info img {

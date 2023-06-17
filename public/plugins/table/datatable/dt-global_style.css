@@ -275,6 +275,11 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 .table-hover:not(.table-dark) tbody tr:hover .table-cancel {
     color: #e7515a;
 }
+@media (max-width: 767px) {
+    table.dataTable .form-control {
+        min-width: 150px;
+    }
+}
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
      /* IE10+ CSS styles go here */
     .dataTables_wrapper .dataTables_length select.form-control {

@@ -1,6 +1,6 @@
 .sidenav {    position: fixed;
     right: -30px;
-    top: 147px;
+    top: 125px;
     width: 236px;
     height: auto;
     border-left: 1px solid #e0e6ed;}
@@ -42,8 +42,9 @@
 #content > .container {
     display: flex;
     max-width: 58.333333%!important;
-    margin-left: 14px;
-    padding: 0 32px!important;
+    margin-left: 80px;
+    margin-left: 2px;
+    padding: 0 16px!important;
 }
 #content > .container > .container { padding: 0; margin: 0; }
 @media (max-width: 575px) {
@@ -51,11 +52,6 @@
         padding: 4px 7px;
         margin-right: 0;
         margin-bottom: 10px;
-    }
-}
-@media (max-width: 991px) {
-    #content > .container {
-        padding: 0 16px!important;
     }
 }
 @media (max-width: 1199px) {
@@ -66,10 +62,5 @@
     }
     #content > .container > .container {
         max-width: 100%;
-    }
-}
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    .sidenav {
-        display: none;
     }
 }

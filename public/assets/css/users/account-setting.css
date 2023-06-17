@@ -1,5 +1,5 @@
 .section { border: 1px solid #e0e6ed;
-    box-shadow: 0 0 40px 0 rgba(94,92,154,.06); }
+    box-shadow: 0 0 40px 0 rgb(94 92 154 / 6%); }
 .layout-spacing {
     padding-bottom: 25px;
 }
@@ -319,6 +319,9 @@
     Footer
 */
 .account-settings-footer {
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 266px);
     background: #191e3a;
     padding: 12px 20px;
     -webkit-box-shadow: -2px -9px 20px rgba(126,142,177,0.12);
@@ -328,6 +331,9 @@
     border-radius: 6px 6px 0 0;
     z-index: 5;
 }
+.sidebar-closed .account-settings-footer {
+    width: calc(100% - 32px);
+}
 .account-settings-footer .as-footer-container {
     display: flex;
     justify-content: space-between;
@@ -335,6 +341,9 @@
 
 @media(max-width: 991px) {
     .account-settings-container .account-content { width: 100%; padding: 0; }
+    .account-settings-footer {
+        width: calc(100% - 29px);
+    }
 }
 @media(max-width: 767px) {
     .general-info .info .upload { border-right: none; }

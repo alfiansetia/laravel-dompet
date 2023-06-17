@@ -1,6 +1,3 @@
-.main-container {
-    min-height: auto;
-}
 .layout-px-spacing {
     min-height: auto!important;
 }
@@ -67,8 +64,8 @@
     border-radius: 6px;
     background-color: #fff;
     box-shadow: rgb(145 158 171 / 24%) 0px 0px 2px 0px, rgb(145 158 171 / 24%) 0px 16px 32px -4px;
-    height: calc(100vh - 197px);
     margin-bottom: 10px;
+    height: calc(100vh - 179px);
 }
 .mail-box-container .avatar-sm {
     width: 2.5rem;
@@ -420,15 +417,15 @@
     margin: auto;
     width: 100%;
     overflow: auto;
-    height: calc(100vh - 302px);
+    height: calc(100vh - 284px);
 }
 .mailbox-inbox .mail-item[id*="unread-"] div.mail-item-heading {}
 .mailbox-inbox .mail-item[id*="unread-"] div.mail-item-heading .mail-item-inner .f-body .mail-title {
-    font-weight: 700;
+    font-weight: 600;
     color: #1b2e4b;
 }
 .mailbox-inbox .mail-item[id*="unread-"] div.mail-item-heading .mail-item-inner .f-body .user-email {
-    font-weight: 700;
+    font-weight: 600;
     color: #0e1726;
 }
 .mailbox-inbox .mail-item[id*="unread-"] div.mail-item-heading .mail-item-inner .mail-content-excerpt {
@@ -622,7 +619,7 @@
 }
 .mailbox-inbox .collapse {
     position: relative;
-    height: calc(100vh - 251px);
+    height: calc(100vh - 234px);
 }
 .mailbox-inbox .mail-content-container {
     position: relative;
@@ -896,16 +893,16 @@
     }
 }
 
-.mail-box-container .animated {
+.animated {
     animation-duration: 1s;
     animation-fill-mode: both;
     -webkit-animation-duration: 1s;
     -webkit-animation-fill-mode: both
 }
-.mail-box-container .animatedFadeInUp {
+.animatedFadeInUp {
     opacity: 0
 }
-.mail-box-container .fadeInUp {
+.fadeInUp {
     opacity: 0;
     animation-name: fadeInUp;
     -webkit-animation-name: fadeInUp;
@@ -920,7 +917,7 @@
         max-width: 170px;
     }
     .main-container:not(.sidebar-closed) .mailbox-inbox .mail-item div.mail-item-heading .attachments {
-        width: calc(100vw - 725px);
+        width: calc(100vw - 940px);
     }
 }
 @media (max-width: 991px) {
@@ -934,6 +931,7 @@
         z-index: 4;
         left: -147px;
         width: 0;
+        background: #fff;
     }
     .tab-title.mail-menu-show {
         left: 0;

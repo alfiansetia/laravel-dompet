@@ -85,7 +85,7 @@ span.flatpickr-weekday {
 .flatpickr-day.startRange.nextMonthDay,
 .flatpickr-day.endRange.nextMonthDay {
     background: #4361ee;
-    color: #fff;
+    color: #e3e4eb;
     border-color: #4361ee;
     font-weight: 500;
 }

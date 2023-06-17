@@ -20,13 +20,3 @@ menuItems.on('click', function(event) {
     }, 800);
   }  // End if
 });
-
-
-function getContainerMargin() { 
-  var p = document.getElementsByTagName("body")[0];
-  var style = p.currentStyle || window.getComputedStyle(p);
-
-  document.getElementsByClassName('sidenav')[0].style.right = style.marginRight;
-}
-window.addEventListener('load',getContainerMargin,false);
-window.addEventListener("resize", getContainerMargin);
