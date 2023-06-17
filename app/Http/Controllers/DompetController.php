@@ -124,9 +124,9 @@ class DompetController extends Controller
         ]);
         $deleted = 0;
         foreach ($request->id as $id) {
-            $user = Dompet::findOrFail($id);
-            $user->delete();
-            if ($user) {
+            $dompet = Dompet::findOrFail($id);
+            $dompet->delete();
+            if ($dompet) {
                 $deleted++;
             }
         }
