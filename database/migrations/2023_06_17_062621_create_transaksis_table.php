@@ -15,17 +15,19 @@ return new class extends Migration
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dompet_id');
+            $table->dateTime('date');
             $table->unsignedBigInteger('user_id');
-            $table->enum('type', ['in', 'out'])->default('out');
+            $table->unsignedBigInteger('from');
+            $table->unsignedBigInteger('to');
             $table->integer('amount')->default(0);
             $table->integer('cost')->default(0);
             $table->integer('revenue')->default(0);
-            $table->enum('status', ['success', 'pending', 'cancel'])->default('success');
+            $table->enum('status', ['success', 'cancel'])->default('success');
             $table->string('desc')->nullable();
             $table->timestamps();
-            $table->foreign('dompet_id')->references('id')->on('dompets')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('from')->references('id')->on('dompets')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('to')->references('id')->on('dompets')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

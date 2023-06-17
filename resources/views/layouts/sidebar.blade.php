@@ -47,7 +47,7 @@
                     class="dropdown-toggle">
                     <div class="">
                         <i data-feather="layers"></i>
-                        <span>DataTables</span>
+                        <span>Transaksi</span>
                     </div>
                     <div>
                         <i data-feather="chevron-right"></i>
@@ -55,7 +55,7 @@
                 </a>
                 <ul class="collapse submenu list-unstyled" id="datatables" data-parent="#accordionExample">
                     <li class="active">
-                        <a href="table_dt_basic.html"> Basic </a>
+                        <a href="{{ route('transaksi.create') }}"> Add Transaksi </a>
                     </li>
                     <li>
                         <a href="table_dt_striped_table.html"> Striped Table </a>

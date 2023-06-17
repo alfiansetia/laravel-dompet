@@ -4,7 +4,7 @@
         <ul class="navbar-item theme-brand flex-row  text-center">
             <li class="nav-item theme-logo">
                 <a href="{{ route('home') }}">
-                    <img src="assets/img/logo.svg" class="navbar-logo" alt="logo">
+                    <img src="{{ asset('assets/img/logo.svg') }}" class="navbar-logo" alt="logo">
                 </a>
             </li>
             <li class="nav-item theme-text">
@@ -56,7 +56,7 @@
                             <div class="">
                                 <div class="media">
                                     <div class="user-img">
-                                        <img src="assets/img/profile-15.jpg" class="img-fluid mr-2" alt="avatar">
+                                        <img src="{{ asset('assets/img/profile-15.jpg') }}" class="img-fluid mr-2" alt="avatar">
                                     </div>
                                     <div class="media-body">
                                         <div class="">
@@ -152,7 +152,7 @@
             <li class="nav-item dropdown user-profile-dropdown">
                 <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="userProfileDropdown"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <img src="assets/img/profile-16.jpg" alt="avatar">
+                    <img src="{{ asset('assets/img/profile-16.jpg') }}" alt="avatar">
                 </a>
                 <div class="dropdown-menu position-absolute" aria-labelledby="userProfileDropdown">
                     <div class="">

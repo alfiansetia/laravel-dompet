@@ -15,8 +15,13 @@ class Transaksi extends Model
         return $this->belongsTo(User::class);
     }
 
-    function dompet()
+    function from()
     {
-        return $this->belongsTo(Dompet::class);
+        return $this->belongsTo(Dompet::class, 'id');
+    }
+
+    function to()
+    {
+        return $this->belongsTo(Dompet::class, 'id');
     }
 }

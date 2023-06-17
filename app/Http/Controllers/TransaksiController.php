@@ -25,10 +25,15 @@ class TransaksiController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Transaksi::with('user', 'dompet')->get();
+            $data = Transaksi::with('user', 'from', 'to')->get();
             return DataTables::of($data)->toJson();
         }
         return view('transaksi.index')->with(['comp' => $this->comp, 'title' => 'Data Transaksi']);
+    }
+
+    public function create()
+    {
+        return view('transaksi.add')->with(['comp' => $this->comp, 'title' => 'Add Transaksi']);
     }
 
     /**

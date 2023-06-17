@@ -16,9 +16,10 @@ class TransaksiSeeder extends Seeder
     public function run()
     {
         Transaksi::create([
-            'dompet_id' => 1,
+            'date'      => date('Y-m-d H:i:s'),
             'user_id'   => 1,
-            'type'      => 'in',
+            'from'      => 1,
+            'to'        => 2,
             'amount'    => 20000,
             'cost'      => 0,
             'revenue'   => 0,

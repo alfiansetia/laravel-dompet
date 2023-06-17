@@ -1,8 +1,8 @@
 @extends('components.template')
 @push('css')
-    <link rel="stylesheet" type="text/css" href="plugins/table/datatable/datatables.css">
-    <link rel="stylesheet" type="text/css" href="plugins/table/datatable/dt-global_style.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/forms/theme-checkbox-radio.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/dt-global_style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/forms/theme-checkbox-radio.css') }}">
     <link href="{{ asset('plugins/table/datatables-buttons/css/buttons.bootstrap4.min.css') }}" rel="stylesheet"
         type="text/css" />
 @endpush
@@ -91,7 +91,7 @@
     </div>
 @endsection
 @push('js')
-    <script src="plugins/table/datatable/datatables.js"></script>
+    <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
@@ -103,157 +103,5 @@
     <script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
-    <script>
-        var table = $('#table').DataTable({
-            processing: true,
-            serverSide: true,
-            rowId: 'id',
-            ajax: "{{ route('transaksi.index') }}",
-            dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
-                "<'table-responsive'tr>" +
-                "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
-            oLanguage: {
-                "oPaginate": {
-                    "sPrevious": '<i data-feather="arrow-left"></i>',
-                    "sNext": '<i data-feather="arrow-right"></i>'
-                },
-                "sSearch": '<i data-feather="search"></i>',
-                "sSearchPlaceholder": "Search...",
-                "sLengthMenu": "Results :  _MENU_",
-            },
-            lengthMenu: [
-                [10, 50, 100, 500, 1000],
-                ['10 rows', '50 rows', '100 rows', '500 rows', '1000 rows']
-            ],
-            pageLength: 10,
-            lengthChange: false,
-            columnDefs: [],
-            columns: [{
-                title: "Date",
-                data: 'date',
-            }, {
-                title: "User",
-                data: 'user.name',
-                visible: false,
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return data != null ? row.user.name : ''
-                    } else {
-                        return data
-                    }
-                }
-            }, {
-                title: "From",
-                data: 'from.name',
-            }, {
-                title: "To",
-                data: 'to.name',
-            }, {
-                title: "Amount",
-                data: 'amount',
-            }, {
-                title: 'Cost',
-                data: 'cost',
-                visible: false,
-            }, {
-                title: 'Revenue',
-                data: 'revenue',
-                visible: false,
-            }, {
-                title: 'Status',
-                data: 'status',
-                class: 'text-center',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return `<span class="badge badge-${data == 'success' ? 'success' : 'danger'}">${data}</span>`
-                    } else {
-                        return data
-                    }
-                }
-            }, {
-                title: 'Desc',
-                data: 'desc',
-                visible: false,
-            }],
-            buttons: [{
-                extend: "colvis",
-                attr: {
-                    'data-toggle': 'tooltip',
-                    'title': 'Column Visible'
-                },
-                className: 'btn btn-sm btn-primary'
-            }, {
-                extend: "pageLength",
-                attr: {
-                    'data-toggle': 'tooltip',
-                    'title': 'Page Length'
-                },
-                className: 'btn btn-sm btn-info'
-            }],
-            drawCallback: function(settings) {
-                feather.replace();
-            },
-            initComplete: function() {
-                $('#tableData').DataTable().buttons().container().appendTo(
-                    '#tableData_wrapper .col-md-6:eq(0)');
-                feather.replace();
-            }
-        });
-
-        multiCheck(table);
-
-        var id;
-
-        $('#table tbody').on('click', 'tr td:not(:first-child)', function() {
-            $('#formEdit .error.invalid-feedback').each(function(i) {
-                $(this).hide();
-            });
-            $('#formEdit input.is-invalid').each(function(i) {
-                $(this).removeClass('is-invalid');
-            });
-            id = table.row(this).id()
-            edit(id, true)
-        });
-
-        function edit(id, show = false) {
-            let url = "{{ route('dompet.show', ':id') }}";
-            url = url.replace(':id', id);
-            $.ajax({
-                url: url,
-                method: 'GET',
-                success: function(result) {
-                    unblock();
-                    if (result.status == true) {
-                        $('#edit_reset').val(result.data.id);
-                        $('#edit_id').val(result.data.id);
-                        $('#edit_name').val(result.data.name);
-                        $('#edit_type').val(result.data.type).change();
-                        $('#edit_acc_name').val(result.data.acc_name);
-                        $('#edit_acc_number').val(result.data.acc_number);
-                        if (show) {
-                            $('#modalEdit').modal('show');
-                        }
-                    } else {
-                        swal(
-                            'Failed!',
-                            result.message,
-                            'error'
-                        )
-                    }
-                },
-                beforeSend: function() {
-                    block();
-                },
-                error: function(xhr, status, error) {
-                    unblock();
-                    er = xhr.responseJSON.errors
-                    swal(
-                        'Failed!',
-                        xhr.responseJSON.message,
-                        'error'
-                    )
-                }
-            });
-        }
-    </script>
+    <script></script>
 @endpush
