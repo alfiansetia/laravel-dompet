@@ -25,11 +25,15 @@ class DompetSeeder extends Seeder
 
         Dompet::create([
             'name'       => 'CASH',
+            'type'       => 'cash',
+            'acc_name'   => 'Alf',
+            'acc_number' => '12345'
         ]);
 
         foreach ($data as $item) {
             Dompet::create([
                 'name'       => $item,
+                'type'       => 'ewallet',
                 'acc_name'   => 'Alf',
                 'acc_number' => '12345'
             ]);

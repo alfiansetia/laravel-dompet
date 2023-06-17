@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DompetController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -32,4 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('user', UserController::class)->only(['index', 'store', 'show', 'update']);
     Route::delete('user', [UserController::class, 'destroy'])->name('user.destroy');
+
+    Route::resource('dompet', DompetController::class)->only(['index', 'store', 'show', 'update']);
+    Route::delete('dompet', [DompetController::class, 'destroy'])->name('dompet.destroy');
 });

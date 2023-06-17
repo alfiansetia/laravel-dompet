@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('dompets', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('acc_name')->nullable();
-            $table->string('acc_number')->nullable();
+            $table->enum('type', ['cash', 'ewallet'])->default('ewallet');
+            $table->string('acc_name');
+            $table->string('acc_number');
             $table->integer('saldo')->default(0);
             $table->timestamps();
         });

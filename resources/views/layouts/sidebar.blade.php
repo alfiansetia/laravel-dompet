@@ -23,6 +23,16 @@
             </li>
 
             <li class="menu">
+                <a href="{{ route('dompet.index') }}" data-active="{{ $title == 'Data Dompet' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'Data Dompet' ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="briefcase"></i>
+                        <span>Dompet</span>
+                    </div>
+                </a>
+            </li>
+
+            <li class="menu">
                 <a href="#datatables" data-toggle="collapse" data-active="false" aria-expanded="false"
                     class="dropdown-toggle">
                     <div class="">
