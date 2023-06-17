@@ -15,28 +15,28 @@ class DompetSeeder extends Seeder
      */
     public function run()
     {
-        $data = [
-            'DANA',
-            'MITRA TOPED',
-            'GOPAY',
-            'OVO',
-            'SPAY',
-        ];
-
         Dompet::create([
             'name'       => 'CASH',
             'type'       => 'cash',
             'acc_name'   => 'Alf',
-            'acc_number' => '12345'
+            'acc_number' => '12345',
+            'saldo'      => 200000
         ]);
 
-        foreach ($data as $item) {
-            Dompet::create([
-                'name'       => $item,
-                'type'       => 'ewallet',
-                'acc_name'   => 'Alf',
-                'acc_number' => '12345'
-            ]);
-        }
+        Dompet::create([
+            'name'       => 'DANA',
+            'type'       => 'ewallet',
+            'acc_name'   => 'Alf',
+            'acc_number' => '12345',
+            'saldo'      => 500000
+        ]);
+
+        Dompet::create([
+            'name'       => 'MITRA TOPED',
+            'type'       => 'ewallet',
+            'acc_name'   => 'Alf',
+            'acc_number' => '12345',
+            'saldo'      => 100000
+        ]);
     }
 }

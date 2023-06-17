@@ -1,7 +1,7 @@
 @extends('components.template')
 @push('css')
-    <link rel="stylesheet" type="text/css" href="plugins/table/datatable/datatables.css">
-    <link rel="stylesheet" type="text/css" href="plugins/table/datatable/dt-global_style.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/dt-global_style.css') }}">
 @endpush
 @section('content')
     <div class="layout-px-spacing">
@@ -80,7 +80,7 @@
     </div>
 @endsection
 @push('js')
-    <script src="plugins/table/datatable/datatables.js"></script>
+    <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
     <script>
         $('#zero-config').DataTable({
             "dom": "<'dt--top-section'<'row'<'col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center'l><'col-12 col-sm-6 d-flex justify-content-sm-end justify-content-center mt-sm-0 mt-3'f>>>" +

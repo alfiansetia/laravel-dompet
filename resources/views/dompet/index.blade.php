@@ -1,10 +1,10 @@
 @extends('components.template')
 @push('css')
-    <link rel="stylesheet" type="text/css" href="plugins/table/datatable/datatables.css">
-    <link rel="stylesheet" type="text/css" href="plugins/table/datatable/dt-global_style.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/forms/theme-checkbox-radio.css">
-    <link href="{{ asset('plugins/table/datatables-buttons/css/buttons.bootstrap4.min.css') }}" rel="stylesheet"
-        type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/dt-global_style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/forms/theme-checkbox-radio.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('plugins/table/datatables-buttons/css/buttons.bootstrap4.min.css') }}" />
 @endpush
 @section('content')
     <div class="layout-px-spacing">
@@ -142,7 +142,7 @@
     </div>
 @endsection
 @push('js')
-    <script src="plugins/table/datatable/datatables.js"></script>
+    <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
@@ -212,7 +212,7 @@
                 title: 'Saldo',
                 data: 'saldo',
             }, ],
-            buttons: [, {
+            buttons: [{
                 text: '<i class="fa fa-plus"></i>Add',
                 className: 'btn btn-sm btn-primary bs-tooltip',
                 attr: {

@@ -1,10 +1,10 @@
 @extends('components.template')
 @push('css')
-    <link rel="stylesheet" type="text/css" href="plugins/table/datatable/datatables.css">
-    <link rel="stylesheet" type="text/css" href="plugins/table/datatable/dt-global_style.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/forms/theme-checkbox-radio.css">
-    <link href="{{ asset('plugins/table/datatables-buttons/css/buttons.bootstrap4.min.css') }}" rel="stylesheet"
-        type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/datatables.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/dt-global_style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/forms/theme-checkbox-radio.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('plugins/table/datatables-buttons/css/buttons.bootstrap4.min.css') }}" />
 @endpush
 @section('content')
     <div class="layout-px-spacing">
@@ -35,6 +35,70 @@
         </div>
     </div>
 
+    <div class="modal animated fade fadeInDown" id="modalAdd" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-plus mr-1" data-toggle="tooltip"
+                            title="Add Data"></i>Add Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" data-toggle="tooltip" title="Close">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="form" class="form-vertical" action="" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="control-label" for="from"></i>From :</label>
+                            <select name="from" id="from" class="form-control" style="width: 100%;" required>
+                                <option value="cash">Cash</option>
+                            </select>
+                            <span id="err_from" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="to"></i>To :</label>
+                            <select name="to" id="to" class="form-control" style="width: 100%;" required>
+                                <option value="cash">Cash</option>
+                            </select>
+                            <span id="err_to" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="amount">Amount :</label>
+                            <input type="text" name="amount" class="form-control maxlength" id="amount"
+                                placeholder="Please Enter Amount" min="1" value="0" required>
+                            <span id="err_amount" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="cost">Cost :</label>
+                            <input type="text" name="cost" class="form-control maxlength" id="cost"
+                                placeholder="Please Enter Cost" min="0" value="0">
+                            <span id="err_cost" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="revenue">Revenue :</label>
+                            <input type="text" name="revenue" class="form-control maxlength" id="revenue"
+                                placeholder="Please Enter Revenue" min="0" value="0">
+                            <span id="err_revenue" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="desc">Desc :</label>
+                            <textarea name="desc" id="desc" class="form-control maxlength" minlength="0" maxlength="100"></textarea>
+                            <span id="err_desc" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"
+                            data-toggle="tooltip" title="Close"></i>Close</button>
+                    <button type="reset" id="reset" class="btn btn-warning"><i class="fas fa-undo mr-1"
+                            data-toggle="tooltip" title="Reset"></i>Reset</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1"
+                            data-toggle="tooltip" title="Save"></i>Save</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal animated fade fadeInDown" id="modalEdit" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
@@ -48,7 +112,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formEdit" class="fofrm-vertical" action="" method="POST" enctype="multipart/form-data">
+                    <form id="formEdit" class="fofrm-vertical" action="" method="POST"
+                        enctype="multipart/form-data">
                         {{ method_field('PUT') }}
                         <div class="form-group">
                             <label class="control-label" for="edit_name">Name :</label>
@@ -104,6 +169,11 @@
     <script src="{{ asset('plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
     <script>
+        $('#modalAdd').on('shown.bs.modal', function() {
+            set_from()
+            set_to()
+        });
+
         var table = $('#table').DataTable({
             processing: true,
             serverSide: true,
@@ -128,6 +198,7 @@
             pageLength: 10,
             lengthChange: false,
             columnDefs: [],
+            order: [[0, 'desc']],
             columns: [{
                 title: "Date",
                 data: 'date',
@@ -176,6 +247,17 @@
                 visible: false,
             }],
             buttons: [{
+                text: '<i class="fa fa-plus"></i>Add',
+                className: 'btn btn-sm btn-primary bs-tooltip',
+                attr: {
+                    'data-toggle': 'tooltip',
+                    'title': 'Add Data'
+                },
+                action: function(e, dt, node, config) {
+                    $('#modalAdd').modal('show');
+                    $('#name').focus();
+                }
+            }, {
                 extend: "colvis",
                 attr: {
                     'data-toggle': 'tooltip',
@@ -213,6 +295,83 @@
             });
             id = table.row(this).id()
             edit(id, true)
+        });
+
+        $('#form').submit(function(event) {
+            event.preventDefault();
+        }).validate({
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            },
+            submitHandler: function(form) {
+                let formData = form;
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('transaksi.store') }}",
+                    data: $(formData).serialize(),
+                    beforeSend: function() {
+                        block();
+                        $('#form .error.invalid-feedback').each(function(i) {
+                            $(this).hide();
+                        });
+                        $('#form input.is-invalid').each(function(i) {
+                            $(this).removeClass('is-invalid');
+                        });
+                    },
+                    success: function(res) {
+                        unblock();
+                        if (res.status == true) {
+                            table.ajax.reload();
+                            $('#reset').click();
+                            $('#modalAdd').modal('hide');
+                            swal(
+                                'Success!',
+                                res.message,
+                                'success'
+                            )
+                        } else {
+                            swal(
+                                'Failed!',
+                                res.message,
+                                'error'
+                            )
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        unblock();
+                        er = xhr.responseJSON.errors
+                        if (xhr.status == 422) {
+                            erlen = Object.keys(er).length
+                            for (i = 0; i < erlen; i++) {
+                                obname = Object.keys(er)[i];
+                                $('#' + obname).addClass('is-invalid');
+                                $('#err_' + obname).text(er[obname][0]);
+                                $('#err_' + obname).show();
+                            }
+                        } else {
+                            swal(
+                                'Failed!',
+                                xhr.responseJSON.message,
+                                'error'
+                            )
+                        }
+                    }
+                });
+            }
         });
 
         function edit(id, show = false) {
@@ -254,6 +413,29 @@
                     )
                 }
             });
+        }
+
+        function set_from() {
+            $('#from').empty()
+            $.get("{{ route('dompet.index') }}").done(function(res) {
+                for (i = 0; i < res.data.length; i++) {
+                    let newOption = new Option(res.data[i].name, res.data[i].id);
+                    if (res.data[i].saldo < 1) {
+                        $(newOption).prop('disabled', true);
+                    }
+                    $('#from').append(newOption);
+                }
+            })
+        }
+
+        function set_to() {
+            $('#to').empty()
+            $.get("{{ route('dompet.index') }}").done(function(res) {
+                for (i = 0; i < res.data.length; i++) {
+                    let newOption = new Option(res.data[i].name, res.data[i].id);
+                    $('#to').append(newOption);
+                }
+            })
         }
     </script>
 @endpush

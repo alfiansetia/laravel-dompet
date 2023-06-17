@@ -17,11 +17,11 @@ class Transaksi extends Model
 
     function from()
     {
-        return $this->belongsTo(Dompet::class, 'id');
+        return $this->belongsTo(Dompet::class, 'from');
     }
 
     function to()
     {
-        return $this->belongsTo(Dompet::class, 'id');
+        return $this->belongsTo(Dompet::class, 'to');
     }
 }

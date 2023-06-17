@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comp;
+use App\Models\Dompet;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class TransaksiController extends Controller
@@ -45,29 +47,47 @@ class TransaksiController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'dompet'    => 'required|integer|exists:dompets,id',
-            'type'      => 'required|in:in,out',
-            'amount'    => 'required|gt:0',
+            'from'      => 'required|integer|exists:dompets,id',
+            'to'        => 'required|integer|exists:dompets,id|different:from',
+            'amount'    => 'required|gt:0|lte:' . Dompet::find($request->from)->saldo,
             'cost'      => 'required|gte:0',
             'revenue'   => 'required|gte:0',
-            'status'    => 'required|in:success,pending,cancel',
             'desc'      => 'nullable|max:100',
+        ],  [
+            'amount.lte' => 'Saldo Dompet Asal tidak cukup',
         ]);
+        DB::beginTransaction();
+        try {
 
-        $transaksi = Transaksi::create([
-            'dompet_id' => $request->dompet,
-            'user_id'   => auth()->user()->id,
-            'type'      => $request->type,
-            'amount'    => $request->amount,
-            'cost'      => $request->cost,
-            'revenue'   => $request->revenue,
-            'status'    => $request->status,
-            'desc'      => $request->desc,
-        ]);
-        if ($transaksi) {
-            return response()->json(['status' => true, 'message' => 'Success insert data!', 'data' => '']);
-        } else {
-            return response()->json(['status' => false, 'message' => 'Failed insert data!', 'data' => '']);
+            $transaksi = Transaksi::create([
+                'date'      => date('Y-m-d H:i:s'),
+                'from'      => $request->from,
+                'to'        => $request->to,
+                'user_id'   => auth()->user()->id,
+                'amount'    => $request->amount,
+                'cost'      => $request->cost,
+                'revenue'   => $request->revenue,
+                'status'    => 'success',
+                'desc'      => $request->desc,
+            ]);
+            $tambah  = $request->amount - $request->cost + $request->revenue;
+            $kurang  = $request->amount + $request->cost;
+            $from = Dompet::find($request->from);
+            $to = Dompet::find($request->to);
+
+            $from->update(['saldo' => $from->saldo - $kurang]);
+            $to->update(['saldo' => $to->saldo + $tambah]);
+
+            DB::commit();
+
+            return response()->json(['status' => true, 'message' => 'Transaksi Success!', 'data' => '']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status'    => false,
+                'message'   => 'Transaksi Gagal',
+                'data'      => '',
+            ]);
         }
     }
 
