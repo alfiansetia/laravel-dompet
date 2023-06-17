@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CapitalController;
 use App\Http\Controllers\DompetController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TransaksiController;
@@ -39,4 +40,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('dompet', [DompetController::class, 'destroy'])->name('dompet.destroy');
 
     Route::resource('transaksi', TransaksiController::class)->only(['index', 'create', 'store', 'show']);
+
+    Route::resource('capital', CapitalController::class)->only(['index', 'create', 'store', 'show']);
 });

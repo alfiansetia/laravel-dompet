@@ -211,6 +211,13 @@
             }, {
                 title: 'Saldo',
                 data: 'saldo',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return hrg(data)
+                    } else {
+                        return data
+                    }
+                }
             }, ],
             buttons: [{
                 text: '<i class="fa fa-plus"></i>Add',

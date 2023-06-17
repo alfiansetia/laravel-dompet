@@ -5,7 +5,7 @@
         <ul class="list-unstyled menu-categories" id="accordionExample">
             <li class="menu">
                 <a href="{{ route('home') }}" data-active="{{ $title == 'Dashboard' ? 'true' : 'false' }}"
-                aria-expanded="{{ $title == 'Dashboard' ? 'true' : 'false' }}" class="dropdown-toggle">
+                    aria-expanded="{{ $title == 'Dashboard' ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <i data-feather="home"></i>
                         <span>Dashboard</span>
@@ -33,11 +33,22 @@
             </li>
 
             <li class="menu">
-                <a href="{{ route('transaksi.index') }}" data-active="{{ $title == 'Data Transaksi' ? 'true' : 'false' }}"
+                <a href="{{ route('transaksi.index') }}"
+                    data-active="{{ $title == 'Data Transaksi' ? 'true' : 'false' }}"
                     aria-expanded="{{ $title == 'Data Transaksi' ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <i data-feather="briefcase"></i>
                         <span>Transaksi</span>
+                    </div>
+                </a>
+            </li>
+
+            <li class="menu">
+                <a href="{{ route('capital.index') }}" data-active="{{ $title == 'Data Capital' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'Data Capital' ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="briefcase"></i>
+                        <span>Capital</span>
                     </div>
                 </a>
             </li>

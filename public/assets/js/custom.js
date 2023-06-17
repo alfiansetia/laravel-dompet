@@ -132,3 +132,12 @@ function GetIEVersion() {
   else
     return 0; //It is not IE
 }
+
+function hrg(x) {
+    let a = parseInt(x)
+    return new Intl.NumberFormat('id-ID').format(a);
+}
+
+function format(number) {
+    return new Intl.NumberFormat('id-ID').format(number);
+}

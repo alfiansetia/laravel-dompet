@@ -16,13 +16,7 @@
                             <thead>
                                 <tr>
                                     <th>Date</th>
-                                    <th>User</th>
-                                    <th>From</th>
-                                    <th>To</th>
                                     <th>Amount</th>
-                                    <th>Cost</th>
-                                    <th>Revenue</th>
-                                    <th class="text-center">Status</th>
                                     <th>Desc</th>
                                 </tr>
                             </thead>
@@ -49,34 +43,16 @@
                 <div class="modal-body">
                     <form id="form" class="form-vertical" action="" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label class="control-label" for="from"></i>From :</label>
-                            <select name="from" id="from" class="form-control" style="width: 100%;" required>
+                            <label class="control-label" for="dompet"></i>Dompet :</label>
+                            <select name="dompet" id="dompet" class="form-control" style="width: 100%;" required>
                             </select>
-                            <span id="err_from" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="to"></i>To :</label>
-                            <select name="to" id="to" class="form-control" style="width: 100%;" required>
-                            </select>
-                            <span id="err_to" class="error invalid-feedback" style="display: hide;"></span>
+                            <span id="err_dompet" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="amount">Amount :</label>
                             <input type="text" name="amount" class="form-control maxlength" id="amount"
                                 placeholder="Please Enter Amount" min="1" value="0" required>
                             <span id="err_amount" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="cost">Cost :</label>
-                            <input type="text" name="cost" class="form-control maxlength" id="cost"
-                                placeholder="Please Enter Cost" min="0" value="0">
-                            <span id="err_cost" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="revenue">Revenue :</label>
-                            <input type="text" name="revenue" class="form-control maxlength" id="revenue"
-                                placeholder="Please Enter Revenue" min="0" value="0">
-                            <span id="err_revenue" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="desc">Desc :</label>
@@ -89,8 +65,8 @@
                             data-toggle="tooltip" title="Close"></i>Close</button>
                     <button type="reset" id="reset" class="btn btn-warning"><i class="fas fa-undo mr-1"
                             data-toggle="tooltip" title="Reset"></i>Reset</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1"
-                            data-toggle="tooltip" title="Save"></i>Save</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1" data-toggle="tooltip"
+                            title="Save"></i>Save</button>
                 </div>
                 </form>
             </div>
@@ -168,15 +144,14 @@
 
     <script>
         $('#modalAdd').on('shown.bs.modal', function() {
-            set_from()
-            set_to()
+            set_dompet()
         });
 
         var table = $('#table').DataTable({
             processing: true,
             serverSide: true,
             rowId: 'id',
-            ajax: "{{ route('transaksi.index') }}",
+            ajax: "{{ route('capital.index') }}",
             dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
                 "<'table-responsive'tr>" +
                 "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
@@ -203,23 +178,6 @@
                 title: "Date",
                 data: 'date',
             }, {
-                title: "User",
-                data: 'user.name',
-                visible: false,
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return data != null ? row.user.name : ''
-                    } else {
-                        return data
-                    }
-                }
-            }, {
-                title: "From",
-                data: 'from.name',
-            }, {
-                title: "To",
-                data: 'to.name',
-            }, {
                 title: "Amount",
                 data: 'amount',
                 render: function(data, type, row, meta) {
@@ -230,42 +188,8 @@
                     }
                 }
             }, {
-                title: 'Cost',
-                data: 'cost',
-                visible: false,
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return hrg(data)
-                    } else {
-                        return data
-                    }
-                }
-            }, {
-                title: 'Revenue',
-                data: 'revenue',
-                visible: false,
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return hrg(data)
-                    } else {
-                        return data
-                    }
-                }
-            }, {
-                title: 'Status',
-                data: 'status',
-                class: 'text-center',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return `<span class="badge badge-${data == 'success' ? 'success' : 'danger'}">${data}</span>`
-                    } else {
-                        return data
-                    }
-                }
-            }, {
                 title: 'Desc',
                 data: 'desc',
-                visible: false,
             }],
             buttons: [{
                 text: '<i class="fa fa-plus"></i>Add',
@@ -436,25 +360,15 @@
             });
         }
 
-        function set_from() {
-            $('#from').empty()
+        function set_dompet() {
+            $('#dompet').empty()
             $.get("{{ route('dompet.index') }}").done(function(res) {
                 for (i = 0; i < res.data.length; i++) {
                     let newOption = new Option(res.data[i].name, res.data[i].id);
                     if (res.data[i].saldo < 1) {
                         $(newOption).prop('disabled', true);
                     }
-                    $('#from').append(newOption);
-                }
-            })
-        }
-
-        function set_to() {
-            $('#to').empty()
-            $.get("{{ route('dompet.index') }}").done(function(res) {
-                for (i = 0; i < res.data.length; i++) {
-                    let newOption = new Option(res.data[i].name, res.data[i].id);
-                    $('#to').append(newOption);
+                    $('#dompet').append(newOption);
                 }
             })
         }
