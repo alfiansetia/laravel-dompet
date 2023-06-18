@@ -56,7 +56,8 @@
                             <div class="">
                                 <div class="media">
                                     <div class="user-img">
-                                        <img src="{{ asset('assets/img/profile-15.jpg') }}" class="img-fluid mr-2" alt="avatar">
+                                        <img src="{{ asset('assets/img/profile-15.jpg') }}" class="img-fluid mr-2"
+                                            alt="avatar">
                                     </div>
                                     <div class="media-body">
                                         <div class="">
@@ -152,12 +153,13 @@
             <li class="nav-item dropdown user-profile-dropdown">
                 <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="userProfileDropdown"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <img src="{{ asset('assets/img/profile-16.jpg') }}" alt="avatar">
+                    <img src="{{ auth()->user()->avatar }}" alt="avatar">
                 </a>
                 <div class="dropdown-menu position-absolute" aria-labelledby="userProfileDropdown">
                     <div class="">
                         <div class="dropdown-item">
-                            <a class="" href="javascript:void(0);"><i data-feather="user"></i>Profile</a>
+                            <a class="" href="{{ route('user.profile') }}"><i
+                                    data-feather="user"></i>Profile</a>
                         </div>
                         <div class="dropdown-item">
                             <a class="" href="javascript:void(0);"><i data-feather="inbox"></i>Inbox</a>

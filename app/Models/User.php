@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'role',
+        'avatar',
     ];
 
     /**
@@ -43,4 +44,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getAvatarAttribute($value)
+    {
+        if ($value) {
+            return url('/images/avatar/' . $value);
+        } else {
+            return url('/images/avatar/boy1.png');
+        }
+    }
 }

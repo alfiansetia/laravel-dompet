@@ -86,7 +86,7 @@ class TransaksiController extends Controller
     }
 
 
-    function update(Request $request, Transaksi $transaksi)
+    public function update(Request $request, Transaksi $transaksi)
     {
         if (!$transaksi) {
             abort(404);

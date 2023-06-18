@@ -141,4 +141,30 @@ class UserController extends Controller
         $data = ['status' => true, 'message' => 'Success Delete : ' . $deleted . ' & Fail : ' . (count($request->id) - $deleted), 'data' => ''];
         return response()->json($data);
     }
+
+    public function profile()
+    {
+        return view('user.profile')->with(['comp' => $this->comp, 'title' => 'User Profile']);
+    }
+
+    public function profileUpdate(Request $request)
+    {
+        $this->validate($request, [
+            'name'   => 'required|min:3|max:50',
+            'email'  => 'required|email|unique:users,email,' . auth()->user()->id,
+            'phone'  => 'required|numeric|digits_between:10,15',
+            'avatar' => 'required|in:boy1.png,boy2.png,girl1.png,girl2.png',
+        ]);
+        $user = auth()->user()->update([
+            'name'   => $request->name,
+            'email'  => $request->email,
+            'phone'  => $request->phone,
+            'avatar' => $request->avatar,
+        ]);
+        if ($user) {
+            return redirect()->route('user.profile')->with(['success' => 'Success update data!']);
+        } else {
+            return redirect()->route('user.profile')->with(['errorr' => 'Success update data!']);
+        }
+    }
 }

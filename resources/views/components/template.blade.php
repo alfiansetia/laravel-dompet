@@ -89,6 +89,23 @@
     <script src="{{ asset('plugins/blockui/jquery.blockUI.min.js') }}"></script>
 
     <script src="{{ asset('plugins/blockui/custom-blockui.js') }}"></script>
+    @if (session()->has('success'))
+        <script>
+            swal(
+                'Success!',
+                "{{ session('success') }}",
+                'success'
+            )
+        </script>
+    @elseif (session()->has('error'))
+        <script>
+            swal(
+                'Failed!',
+                "{{ session('error') }}",
+                'error'
+            )
+        </script>
+    @endif
 
     <script>
         $(document).ready(function() {
