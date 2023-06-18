@@ -117,6 +117,7 @@
             }).then(function(result) {
                 if (result.value) {
                     $('#form_logout').submit();
+                    block()
                 }
             })
         }
