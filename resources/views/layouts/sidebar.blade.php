@@ -66,7 +66,7 @@
                 </a>
                 <ul class="collapse submenu list-unstyled" id="datatables" data-parent="#accordionExample">
                     <li class="active">
-                        <a href="{{ route('transaksi.create') }}"> Add Transaksi </a>
+                        <a href="{{ route('transaksi.index') }}"> Add Transaksi </a>
                     </li>
                     <li>
                         <a href="table_dt_striped_table.html"> Striped Table </a>

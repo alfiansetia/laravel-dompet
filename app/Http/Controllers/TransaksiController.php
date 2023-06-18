@@ -49,16 +49,15 @@ class TransaksiController extends Controller
         $this->validate($request, [
             'from'      => 'required|integer|exists:dompets,id',
             'to'        => 'required|integer|exists:dompets,id|different:from',
-            'amount'    => 'required|gt:0|lte:' . Dompet::find($request->from)->saldo,
-            'cost'      => 'required|gte:0',
-            'revenue'   => 'required|gte:0',
+            'amount'    => 'required|integer|gt:0|lte:' . Dompet::find($request->from)->saldo,
+            'cost'      => 'required|integer|gte:0',
+            'revenue'   => 'required|integer|gte:0',
             'desc'      => 'nullable|max:100',
         ],  [
             'amount.lte' => 'Saldo Dompet Asal tidak cukup',
         ]);
         DB::beginTransaction();
         try {
-
             Transaksi::create([
                 'date'      => date('Y-m-d H:i:s'),
                 'from'      => $request->from,
@@ -91,6 +90,25 @@ class TransaksiController extends Controller
         }
     }
 
+
+    function update(Request $request, Transaksi $transaksi)
+    {
+        if (!$transaksi) {
+            abort(404);
+        }
+        $this->validate($request, [
+            'desc' => 'nullable|max:100'
+        ]);
+        $transaksi = $transaksi->update([
+            'desc' => $request->desc,
+        ]);
+        if ($transaksi) {
+            return response()->json(['status' => true, 'message' => 'Success update data!', 'data' => '']);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Failed update data!', 'data' => '']);
+        }
+    }
+
     /**
      * Display the specified resource.
      *
@@ -102,9 +120,44 @@ class TransaksiController extends Controller
         if (!$transaksi) {
             abort(404);
         }
+        $transaksi->load('from', 'to', 'user');
         if ($request->ajax()) {
             return response()->json(['status' => true, 'message' => '', 'data' => $transaksi]);
         }
         abort(404);
+    }
+
+    public function destroy(Transaksi $transaksi)
+    {
+        if (!$transaksi) {
+            abort(404);
+        }
+        if ($transaksi->status == 'cancel') {
+            return response()->json(['status' => false, 'message' => 'Transaksi already cancel!', 'data' => '']);
+        }
+        DB::beginTransaction();
+        try {
+            $from = Dompet::find($transaksi->from);
+            $to = Dompet::find($transaksi->to);
+            $from->update([
+                'saldo' => $from->saldo + $transaksi->amount + $transaksi->cost,
+            ]);
+            $to->update([
+                'saldo' => $to->saldo - $transaksi->amount + $transaksi->cost - $transaksi->revenue
+            ]);
+
+            $transaksi->update([
+                'status' => 'cancel'
+            ]);
+            DB::commit();
+            return response()->json(['status' => true, 'message' => 'Transaksi has been canceled!', 'data' => '']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status'    => false,
+                'message'   => 'Transaksi Gagal',
+                'data'      => '',
+            ]);
+        }
     }
 }

@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('dompet', DompetController::class)->only(['index', 'store', 'show', 'update']);
     Route::delete('dompet', [DompetController::class, 'destroy'])->name('dompet.destroy');
 
-    Route::resource('transaksi', TransaksiController::class)->only(['index', 'create', 'store', 'show']);
+    Route::resource('transaksi', TransaksiController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 
     Route::resource('capital', CapitalController::class)->only(['index', 'create', 'store', 'show']);
 });

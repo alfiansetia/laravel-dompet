@@ -114,37 +114,44 @@
                         enctype="multipart/form-data">
                         {{ method_field('PUT') }}
                         <div class="form-group">
-                            <label class="control-label" for="edit_name">Name :</label>
-                            <input type="text" name="name" class="form-control maxlength" id="edit_name"
-                                placeholder="Please Enter Name" minlength="3" maxlength="25" required>
-                            <span id="err_edit_name" class="error invalid-feedback" style="display: hide;"></span>
+                            <label class="control-label" for="edit_user">User :</label>
+                            <input type="text" class="form-control" id="edit_user" readonly>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="edit_type"></i>Type :</label>
-                            <select name="type" id="edit_type" class="form-control" style="width: 100%;" required>
-                                <option value="cash">Cash</option>
-                                <option value="ewallet">Ewallet</option>
-                            </select>
-                            <span id="err_edit_type" class="error invalid-feedback" style="display: hide;"></span>
+                            <label class="control-label" for="edit_date">Date :</label>
+                            <input type="text" class="form-control" id="edit_date" readonly>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="edit_acc_name">Account Name :</label>
-                            <input type="text" name="acc_name" class="form-control maxlength" id="edit_acc_name"
-                                placeholder="Please Enter Account Name" minlength="3" maxlength="25" required>
-                            <span id="err_edit_acc_name" class="error invalid-feedback" style="display: hide;"></span>
+                            <label class="control-label" for="edit_from">From :</label>
+                            <input type="text" class="form-control" id="edit_from" readonly>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="edit_acc_number">Account Number :</label>
-                            <input type="text" name="acc_number" class="form-control maxlength" id="edit_acc_number"
-                                placeholder="Please Enter Account Name" minlength="3" maxlength="25" required>
-                            <span id="err_edit_acc_number" class="error invalid-feedback" style="display: hide;"></span>
+                            <label class="control-label" for="edit_to">To :</label>
+                            <input type="text" class="form-control" id="edit_to" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="edit_amount">Amount :</label>
+                            <input type="text" class="form-control" id="edit_amount" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="edit_cost">Cost :</label>
+                            <input type="text" class="form-control" id="edit_cost" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="edit_revenue">Revenue :</label>
+                            <input type="text" class="form-control" id="edit_revenue" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="edit_desc">Desc :</label>
+                            <textarea name="desc" id="edit_desc" class="form-control maxlength" minlength="0" maxlength="100"></textarea>
+                            <span id="err_edit_desc" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"
                             data-toggle="tooltip" title="Close"></i>Close</button>
-                    <button type="button" id="edit_reset" class="btn btn-warning"><i class="fas fa-undo mr-1"
-                            data-toggle="tooltip" title="Reset"></i>Reset</button>
+                    <button type="button" id="edit_reset" class="btn btn-danger"><i class="fas fa-undo mr-1"
+                            data-toggle="tooltip" title="Set Cancel"></i>Set Cancel</button>
                     <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1"
                             data-toggle="tooltip" title="Save"></i>Save</button>
                 </div>
@@ -308,12 +315,6 @@
         var id;
 
         $('#table tbody').on('click', 'tr td:not(:first-child)', function() {
-            $('#formEdit .error.invalid-feedback').each(function(i) {
-                $(this).hide();
-            });
-            $('#formEdit input.is-invalid').each(function(i) {
-                $(this).removeClass('is-invalid');
-            });
             id = table.row(this).id()
             edit(id, true)
         });
@@ -395,8 +396,146 @@
             }
         });
 
+        $('#formEdit').submit(function(event) {
+            event.preventDefault();
+        }).validate({
+            errorElement: 'span',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+                $(element).addClass('is-valid');
+            },
+            submitHandler: function(form) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    }
+                });
+                var formData1 = form;
+                let url = "{{ route('transaksi.update', ':id') }}";
+                url = url.replace(':id', id);
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: $(formData1).serialize(),
+                    beforeSend: function() {
+                        block();
+                        $('#formEdit .error.invalid-feedback').each(function(i) {
+                            $(this).hide();
+                        });
+                        $('#formEdit input.is-invalid').each(function(i) {
+                            $(this).removeClass('is-invalid');
+                        });
+                    },
+                    success: function(res) {
+                        unblock();
+                        if (res.status == true) {
+                            table.ajax.reload();
+                            swal(
+                                'Success!',
+                                res.message,
+                                'success'
+                            )
+                        } else {
+                            swal(
+                                'Failed!',
+                                res.message,
+                                'error'
+                            )
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        unblock();
+                        er = xhr.responseJSON.errors
+                        erlen = Object.keys(er).length
+                        if (xhr.status == 422) {
+                            for (i = 0; i < erlen; i++) {
+                                obname = Object.keys(er)[i];
+                                $('#' + obname).addClass('is-invalid');
+                                $('#err_edit_' + obname).text(er[obname][0]);
+                                $('#err_edit_' + obname).show();
+                            }
+                        } else {
+                            swal(
+                                'Failed!',
+                                xhr.responseJSON.message,
+                                'error'
+                            )
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#edit_reset').click(function() {
+            let id = $(this).val();
+            swal({
+                title: 'Cancel Transaksi?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa fa-thumbs-up"></i> Yes!',
+                confirmButtonAriaLabel: 'Thumbs up, Yes!',
+                cancelButtonText: '<i class="fa fa-thumbs-down"></i> No',
+                cancelButtonAriaLabel: 'Thumbs down',
+                padding: '2em',
+                animation: false,
+                customClass: 'animated tada',
+            }).then(function(result) {
+                if (result.value) {
+                    let url = "{{ route('transaksi.destroy', ':id') }}";
+                    url = url.replace(':id', id);
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: url,
+                        method: 'DELETE',
+                        success: function(result) {
+                            unblock();
+                            if (result.status == true) {
+                                table.ajax.reload();
+                                $('#modalEdit').modal('hide');
+                                swal(
+                                    'Success!',
+                                    result.message,
+                                    'success'
+                                )
+                            } else {
+                                swal(
+                                    'Failed!',
+                                    result.message,
+                                    'error'
+                                )
+                            }
+                        },
+                        beforeSend: function() {
+                            block();
+                        },
+                        error: function(xhr, status, error) {
+                            unblock();
+                            er = xhr.responseJSON.errors
+                            swal(
+                                'Failed!',
+                                xhr.responseJSON.message,
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        })
+
         function edit(id, show = false) {
-            let url = "{{ route('dompet.show', ':id') }}";
+            let url = "{{ route('transaksi.show', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
@@ -406,10 +545,19 @@
                     if (result.status == true) {
                         $('#edit_reset').val(result.data.id);
                         $('#edit_id').val(result.data.id);
-                        $('#edit_name').val(result.data.name);
-                        $('#edit_type').val(result.data.type).change();
-                        $('#edit_acc_name').val(result.data.acc_name);
-                        $('#edit_acc_number').val(result.data.acc_number);
+                        $('#edit_date').val(result.data.date);
+                        $('#edit_user').val(result.data.user.name)
+                        $('#edit_from').val(result.data.from.name)
+                        $('#edit_to').val(result.data.to.name)
+                        $('#edit_amount').val(hrg(result.data.amount));
+                        $('#edit_cost').val(hrg(result.data.cost));
+                        $('#edit_revenue').val(hrg(result.data.revenue));
+                        $('#edit_desc').val(result.data.desc);
+                        if (result.data.status == 'success') {
+                            $('#edit_reset').prop('disabled', false)
+                        } else {
+                            $('#edit_reset').prop('disabled', true)
+                        }
                         if (show) {
                             $('#modalEdit').modal('show');
                         }
