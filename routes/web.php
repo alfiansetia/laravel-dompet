@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CapitalController;
+use App\Http\Controllers\CompController;
 use App\Http\Controllers\DompetController;
 use App\Http\Controllers\ExpenditureController;
 use App\Http\Controllers\HomeController;
@@ -47,4 +48,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('capital', CapitalController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 
     Route::resource('expenditure', ExpenditureController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+
+    Route::resource('comp', CompController::class)->only(['index', 'store']);
 });

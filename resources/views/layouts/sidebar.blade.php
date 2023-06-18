@@ -84,6 +84,16 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="menu">
+                <a href="{{ route('comp.index') }}" data-active="{{ $title == 'Company Setting' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'Company Setting' ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="upload"></i>
+                        <span>Company Setting</span>
+                    </div>
+                </a>
+            </li>
         </ul>
 
     </nav>

@@ -4,9 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Comp;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class CompController extends Controller
 {
+    private $comp;
+
+    public function __construct()
+    {
+        $this->comp = Comp::first();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,17 +22,7 @@ class CompController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return view('comp.index')->with(['comp' => $this->comp, 'title' => 'Company Setting']);
     }
 
     /**
@@ -35,51 +33,52 @@ class CompController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name'      => 'required|max:30',
+            'phone'     => 'required|numeric|digits_between:10,15',
+            'address'   => 'required|max:100',
+        ]);
+        $comp = $this->comp->update([
+            'name'      => $request->name,
+            'telp'      => $request->telp,
+            'address'   => $request->address,
+        ]);
+        if ($comp) {
+            return redirect()->route('comp.index')->with('success', 'Success Update Data!');
+        } else {
+            return redirect()->route('comp.index')->with('error', 'Failed Update Data!');
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Comp  $comp
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Comp $comp)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Comp  $comp
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Comp $comp)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Comp  $comp
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Comp $comp)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Comp  $comp
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Comp $comp)
-    {
-        //
+        if (!$comp) {
+            abort(404);
+        }
+        $this->validate($request, [
+            'logo'      => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'favicon'   => 'required|image|mimes:png,jpg|max:1024',
+        ]);
+        $logo = $this->comp->logo;
+        $fav = $this->comp->fav;
+        if ($files = $request->file('logo')) {
+            $destinationPath = 'images/company/';
+            $logo = 'logo.' . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $logo);
+        }
+        if ($files = $request->file('favicon')) {
+            $destinationPath = 'images/company/';
+            $fav = 'favicon.' . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $fav);
+        }
+        $comp = $this->comp->update([
+            'logo'      => $logo,
+            'favicon'   => $fav,
+        ]);
+        if ($comp) {
+            return redirect()->route('comp.index')->with('success', 'Success Update Data!');
+        } else {
+            return redirect()->route('comp.index')->with('error', 'Failed Update Data!');
+        }
     }
 }
