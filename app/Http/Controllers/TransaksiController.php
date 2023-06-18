@@ -59,7 +59,7 @@ class TransaksiController extends Controller
         DB::beginTransaction();
         try {
 
-            $transaksi = Transaksi::create([
+            Transaksi::create([
                 'date'      => date('Y-m-d H:i:s'),
                 'from'      => $request->from,
                 'to'        => $request->to,
