@@ -17,9 +17,9 @@ class TransaksiSeeder extends Seeder
     {
         Transaksi::create([
             'date'      => date('Y-m-d H:i:s'),
-            'user_id'   => 1,
-            'from'      => 1,
-            'to'        => 2,
+            'user_id'   => 2,
+            'from_id'   => 1,
+            'to_id'     => 2,
             'amount'    => 20000,
             'cost'      => 0,
             'revenue'   => 0,

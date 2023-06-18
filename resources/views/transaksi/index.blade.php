@@ -15,6 +15,7 @@
                         <table id="table" class="table dt-table-hover" style="width:100%;cursor: pointer;">
                             <thead>
                                 <tr>
+                                    <th>NO</th>
                                     <th>Date</th>
                                     <th>User</th>
                                     <th>From</th>
@@ -22,7 +23,6 @@
                                     <th>Amount</th>
                                     <th>Cost</th>
                                     <th>Revenue</th>
-                                    <th class="text-center">Status</th>
                                     <th>Desc</th>
                                 </tr>
                             </thead>
@@ -161,7 +161,7 @@
     </div>
 @endsection
 @push('js')
-    <script src="plugins/table/datatable/datatables.js"></script>
+    <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
@@ -207,6 +207,16 @@
                 [0, 'desc']
             ],
             columns: [{
+                title: "NO",
+                data: 'id',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return `<span data-toggle="tooltip" title="${row.status}" class="badge badge-${row.status == 'success' ? 'success' : 'danger'}">${'TRX-' + data}</span>`
+                    } else {
+                        return data
+                    }
+                }
+            }, {
                 title: "Date",
                 data: 'date',
             }, {
@@ -259,17 +269,6 @@
                     }
                 }
             }, {
-                title: 'Status',
-                data: 'status',
-                class: 'text-center',
-                render: function(data, type, row, meta) {
-                    if (type == 'display') {
-                        return `<span class="badge badge-${data == 'success' ? 'success' : 'danger'}">${data}</span>`
-                    } else {
-                        return data
-                    }
-                }
-            }, {
                 title: 'Desc',
                 data: 'desc',
                 visible: false,
@@ -314,7 +313,7 @@
 
         var id;
 
-        $('#table tbody').on('click', 'tr td:not(:first-child)', function() {
+        $('#table tbody').on('click', 'tr td', function() {
             id = table.row(this).id()
             edit(id, true)
         });
@@ -558,6 +557,11 @@
                         } else {
                             $('#edit_reset').prop('disabled', true)
                         }
+                        $('.title-edit').remove()
+                        $('#titleEdit').append(
+                            `<span class="badge title-edit ml-2 badge-${result.data.status == 'success' ? 'success' : 'danger'}">TRX-${result.data.id}`
+                        )
+
                         if (show) {
                             $('#modalEdit').modal('show');
                         }

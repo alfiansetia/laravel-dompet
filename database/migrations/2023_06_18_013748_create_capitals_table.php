@@ -16,10 +16,13 @@ return new class extends Migration
         Schema::create('capitals', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('dompet_id');
             $table->integer('amount')->default(0);
+            $table->enum('status', ['success', 'cancel'])->default('success');
             $table->string('desc')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('dompet_id')->references('id')->on('dompets')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }

@@ -16,6 +16,7 @@ class CapitalSeeder extends Seeder
     public function run()
     {
         Capital::create([
+            'user_id'   => 2,
             'date'      => date('Y-m-d H:i:s'),
             'dompet_id' => 1,
             'amount'    => 200000,
@@ -23,6 +24,7 @@ class CapitalSeeder extends Seeder
         ]);
 
         Capital::create([
+            'user_id'   => 2,
             'date'      => date('Y-m-d H:i:s'),
             'dompet_id' => 2,
             'amount'    => 400000,
@@ -30,6 +32,7 @@ class CapitalSeeder extends Seeder
         ]);
 
         Capital::create([
+            'user_id'   => 2,
             'date'      => date('Y-m-d H:i:s'),
             'dompet_id' => 2,
             'amount'    => 100000,

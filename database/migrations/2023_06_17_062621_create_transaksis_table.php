@@ -17,17 +17,17 @@ return new class extends Migration
             $table->id();
             $table->dateTime('date');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('from');
-            $table->unsignedBigInteger('to');
+            $table->unsignedBigInteger('from_id');
+            $table->unsignedBigInteger('to_id');
             $table->integer('amount')->default(0);
             $table->integer('cost')->default(0);
             $table->integer('revenue')->default(0);
             $table->enum('status', ['success', 'cancel'])->default('success');
             $table->string('desc')->nullable();
             $table->timestamps();
-            $table->foreign('from')->references('id')->on('dompets')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('from_id')->references('id')->on('dompets')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreign('to')->references('id')->on('dompets')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('to_id')->references('id')->on('dompets')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

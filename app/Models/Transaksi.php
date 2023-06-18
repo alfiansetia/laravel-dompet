@@ -10,18 +10,24 @@ class Transaksi extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    function user()
+    function getNoAttribute()
+    {
+        $no = str_pad($this->id, 4, '0', STR_PAD_LEFT);
+        return 'TRX-' . $no;
+    }
+
+    public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    function from()
+    public function from()
     {
-        return $this->belongsTo(Dompet::class, 'from');
+        return $this->belongsTo(Dompet::class, 'from_id');
     }
 
-    function to()
+    public function to()
     {
-        return $this->belongsTo(Dompet::class, 'to');
+        return $this->belongsTo(Dompet::class, 'to_id');
     }
 }

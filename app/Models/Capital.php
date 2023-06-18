@@ -11,6 +11,11 @@ class Capital extends Model
 
     protected $guarded = ['id'];
 
+    function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     function dompet()
     {
         return $this->belongsTo(Dompet::class);

@@ -50,7 +50,7 @@ class TransaksiController extends Controller
             'from'      => 'required|integer|exists:dompets,id',
             'to'        => 'required|integer|exists:dompets,id|different:from',
             'amount'    => 'required|integer|gt:0|lte:' . Dompet::find($request->from)->saldo,
-            'cost'      => 'required|integer|gte:0',
+            'cost'      => 'required|integer|gte:0|lt:' . $request->amount,
             'revenue'   => 'required|integer|gte:0',
             'desc'      => 'nullable|max:100',
         ],  [
@@ -58,10 +58,10 @@ class TransaksiController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            Transaksi::create([
+            $transaksi = Transaksi::create([
                 'date'      => date('Y-m-d H:i:s'),
-                'from'      => $request->from,
-                'to'        => $request->to,
+                'from_id'   => $request->from,
+                'to_id'     => $request->to,
                 'user_id'   => auth()->user()->id,
                 'amount'    => $request->amount,
                 'cost'      => $request->cost,
@@ -71,11 +71,9 @@ class TransaksiController extends Controller
             ]);
             $tambah  = $request->amount - $request->cost + $request->revenue;
             $kurang  = $request->amount + $request->cost;
-            $from = Dompet::find($request->from);
-            $to = Dompet::find($request->to);
 
-            $from->update(['saldo' => $from->saldo - $kurang]);
-            $to->update(['saldo' => $to->saldo + $tambah]);
+            $transaksi->from->update(['saldo' => $transaksi->from->saldo - $kurang]);
+            $transaksi->to->update(['saldo' => $transaksi->to->saldo + $tambah]);
 
             DB::commit();
 
@@ -137,13 +135,11 @@ class TransaksiController extends Controller
         }
         DB::beginTransaction();
         try {
-            $from = Dompet::find($transaksi->from);
-            $to = Dompet::find($transaksi->to);
-            $from->update([
-                'saldo' => $from->saldo + $transaksi->amount + $transaksi->cost,
+            $transaksi->from->update([
+                'saldo' => $transaksi->from->saldo + $transaksi->amount + $transaksi->cost,
             ]);
-            $to->update([
-                'saldo' => $to->saldo - $transaksi->amount + $transaksi->cost - $transaksi->revenue
+            $transaksi->to->update([
+                'saldo' => $transaksi->to->saldo - $transaksi->amount + $transaksi->cost - $transaksi->revenue
             ]);
 
             $transaksi->update([

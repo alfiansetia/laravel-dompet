@@ -41,5 +41,5 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('transaksi', TransaksiController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 
-    Route::resource('capital', CapitalController::class)->only(['index', 'create', 'store', 'show']);
+    Route::resource('capital', CapitalController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 });
