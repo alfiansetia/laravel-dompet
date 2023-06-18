@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CapitalController;
 use App\Http\Controllers\DompetController;
+use App\Http\Controllers\ExpenditureController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
@@ -42,4 +43,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('transaksi', TransaksiController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 
     Route::resource('capital', CapitalController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+
+    Route::resource('expenditure', ExpenditureController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 });

@@ -69,11 +69,8 @@ class TransaksiController extends Controller
                 'status'    => 'success',
                 'desc'      => $request->desc,
             ]);
-            $tambah  = $request->amount - $request->cost + $request->revenue;
-            $kurang  = $request->amount + $request->cost;
-
-            $transaksi->from->update(['saldo' => $transaksi->from->saldo - $kurang]);
-            $transaksi->to->update(['saldo' => $transaksi->to->saldo + $tambah]);
+            $transaksi->from->update(['saldo' => $transaksi->from->saldo - $transaksi->amount - $transaksi->cost]);
+            $transaksi->to->update(['saldo' => $transaksi->to->saldo + $transaksi->amount + $transaksi->revenue - $transaksi->cost]);
 
             DB::commit();
 
@@ -132,6 +129,9 @@ class TransaksiController extends Controller
         }
         if ($transaksi->status == 'cancel') {
             return response()->json(['status' => false, 'message' => 'Transaksi already cancel!', 'data' => '']);
+        }
+        if ($transaksi->to->saldo < ($transaksi->amount + $transaksi->cost - $transaksi->revenue)) {
+            return response()->json(['status' => false, 'message' => 'Saldo tujuan untuk pembatalan tidak cukup!', 'data' => '']);
         }
         DB::beginTransaction();
         try {

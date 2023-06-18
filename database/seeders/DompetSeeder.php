@@ -20,7 +20,6 @@ class DompetSeeder extends Seeder
             'type'       => 'cash',
             'acc_name'   => 'Alf',
             'acc_number' => '12345',
-            'saldo'      => 200000
         ]);
 
         Dompet::create([
@@ -28,7 +27,6 @@ class DompetSeeder extends Seeder
             'type'       => 'ewallet',
             'acc_name'   => 'Alf',
             'acc_number' => '12345',
-            'saldo'      => 500000
         ]);
 
         Dompet::create([
@@ -36,7 +34,6 @@ class DompetSeeder extends Seeder
             'type'       => 'ewallet',
             'acc_name'   => 'Alf',
             'acc_number' => '12345',
-            'saldo'      => 100000
         ]);
     }
 }

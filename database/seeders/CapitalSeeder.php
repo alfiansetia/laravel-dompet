@@ -15,7 +15,7 @@ class CapitalSeeder extends Seeder
      */
     public function run()
     {
-        Capital::create([
+        $cap1 = Capital::create([
             'user_id'   => 2,
             'date'      => date('Y-m-d H:i:s'),
             'dompet_id' => 1,
@@ -23,20 +23,32 @@ class CapitalSeeder extends Seeder
             'desc'      => 'Modal',
         ]);
 
-        Capital::create([
+        $cap1->dompet->update([
+            'saldo' => $cap1->dompet->saldo + $cap1->amount
+        ]);
+
+        $cap2 = Capital::create([
             'user_id'   => 2,
             'date'      => date('Y-m-d H:i:s'),
             'dompet_id' => 2,
-            'amount'    => 400000,
+            'amount'    => 500000,
             'desc'      => 'Modal',
         ]);
 
-        Capital::create([
+        $cap2->dompet->update([
+            'saldo' => $cap2->dompet->saldo + $cap2->amount
+        ]);
+
+        $cap3 = Capital::create([
             'user_id'   => 2,
             'date'      => date('Y-m-d H:i:s'),
-            'dompet_id' => 2,
+            'dompet_id' => 3,
             'amount'    => 100000,
             'desc'      => 'Modal',
+        ]);
+
+        $cap3->dompet->update([
+            'saldo' => $cap3->dompet->saldo + $cap3->amount
         ]);
     }
 }

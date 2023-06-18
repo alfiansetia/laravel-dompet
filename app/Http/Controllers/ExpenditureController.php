@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Capital;
 use App\Models\Comp;
+use App\Models\Dompet;
+use App\Models\Expenditure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
-class CapitalController extends Controller
+class ExpenditureController extends Controller
 {
     private $comp;
 
@@ -25,10 +26,10 @@ class CapitalController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Capital::with('dompet', 'user')->get();
+            $data = Expenditure::with('dompet', 'user')->get();
             return DataTables::of($data)->toJson();
         }
-        return view('capital.index')->with(['comp' => $this->comp, 'title' => 'Data Capital']);
+        return view('expenditure.index')->with(['comp' => $this->comp, 'title' => 'Data Expenditure']);
     }
 
     /**
@@ -41,12 +42,15 @@ class CapitalController extends Controller
     {
         $this->validate($request, [
             'dompet' => 'required|integer|exists:dompets,id',
-            'amount' => 'required|integer|gt:0',
+            'amount' => 'required|integer|gt:0|lte:' . Dompet::find($request->dompet)->saldo,
             'desc'   => 'nullable|max:100',
+        ], [
+            'amount.lte' => 'Saldo tujuan tidak cukup!'
         ]);
+
         DB::beginTransaction();
         try {
-            $capital = Capital::create([
+            $expenditure = Expenditure::create([
                 'user_id'   => auth()->user()->id,
                 'date'      => date('Y-m-d H:i:s'),
                 'dompet_id' => $request->dompet,
@@ -54,8 +58,8 @@ class CapitalController extends Controller
                 'status'    => 'success',
                 'desc'      => $request->desc,
             ]);
-            $capital->dompet->update([
-                'saldo' => $capital->dompet->saldo + $capital->amount
+            $expenditure->dompet->update([
+                'saldo' => $expenditure->dompet->saldo - $expenditure->amount
             ]);
 
             DB::commit();
@@ -71,18 +75,43 @@ class CapitalController extends Controller
         }
     }
 
-    function update(Request $request, Capital $capital)
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Expenditure  $expenditure
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, Expenditure $expenditure)
     {
-        if (!$capital) {
+        if (!$expenditure) {
+            abort(404);
+        }
+        $expenditure->load('user', 'dompet');
+        if ($request->ajax()) {
+            return response()->json(['status' => true, 'message' => '', 'data' => $expenditure]);
+        }
+        abort(404);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Expenditure  $expenditure
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Expenditure $expenditure)
+    {
+        if (!$expenditure) {
             abort(404);
         }
         $this->validate($request, [
             'desc' => 'nullable|max:100'
         ]);
-        $capital = $capital->update([
+        $expenditure = $expenditure->update([
             'desc' => $request->desc,
         ]);
-        if ($capital) {
+        if ($expenditure) {
             return response()->json(['status' => true, 'message' => 'Success update data!', 'data' => '']);
         } else {
             return response()->json(['status' => false, 'message' => 'Failed update data!', 'data' => '']);
@@ -90,41 +119,26 @@ class CapitalController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Capital  $capital
+     * @param  \App\Models\Expenditure  $expenditure
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, Capital $capital)
+    public function destroy(Expenditure $expenditure)
     {
-        if (!$capital) {
+        if (!$expenditure) {
             abort(404);
         }
-        $capital->load('user', 'dompet');
-        if ($request->ajax()) {
-            return response()->json(['status' => true, 'message' => '', 'data' => $capital]);
-        }
-        abort(404);
-    }
-
-    public function destroy(Capital $capital)
-    {
-        if (!$capital) {
-            abort(404);
-        }
-        if ($capital->status == 'cancel') {
+        if ($expenditure->status == 'cancel') {
             return response()->json(['status' => false, 'message' => 'Transaksi already cancel!', 'data' => '']);
-        }
-        if ($capital->dompet->saldo < $capital->amount) {
-            return response()->json(['status' => false, 'message' => 'Saldo untuk pembatalan tidak cukup!', 'data' => '']);
         }
         DB::beginTransaction();
         try {
-            $capital->dompet->update([
-                'saldo' => $capital->dompet->saldo - $capital->amount,
+            $expenditure->dompet->update([
+                'saldo' => $expenditure->dompet->saldo + $expenditure->amount,
             ]);
 
-            $capital->update([
+            $expenditure->update([
                 'status' => 'cancel'
             ]);
             DB::commit();

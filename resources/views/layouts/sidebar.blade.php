@@ -26,7 +26,7 @@
                 <a href="{{ route('dompet.index') }}" data-active="{{ $title == 'Data Dompet' ? 'true' : 'false' }}"
                     aria-expanded="{{ $title == 'Data Dompet' ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
-                        <i data-feather="briefcase"></i>
+                        <i data-feather="dollar-sign"></i>
                         <span>Dompet</span>
                     </div>
                 </a>
@@ -37,7 +37,7 @@
                     data-active="{{ $title == 'Data Transaksi' ? 'true' : 'false' }}"
                     aria-expanded="{{ $title == 'Data Transaksi' ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
-                        <i data-feather="briefcase"></i>
+                        <i data-feather="repeat"></i>
                         <span>Transaksi</span>
                     </div>
                 </a>
@@ -47,8 +47,19 @@
                 <a href="{{ route('capital.index') }}" data-active="{{ $title == 'Data Capital' ? 'true' : 'false' }}"
                     aria-expanded="{{ $title == 'Data Capital' ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
-                        <i data-feather="briefcase"></i>
+                        <i data-feather="download"></i>
                         <span>Capital</span>
+                    </div>
+                </a>
+            </li>
+
+            <li class="menu">
+                <a href="{{ route('expenditure.index') }}"
+                    data-active="{{ $title == 'Data Expenditure' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'Data Expenditure' ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="upload"></i>
+                        <span>Expenditure</span>
                     </div>
                 </a>
             </li>
@@ -58,7 +69,7 @@
                     class="dropdown-toggle">
                     <div class="">
                         <i data-feather="layers"></i>
-                        <span>Transaksi</span>
+                        <span>Master Data</span>
                     </div>
                     <div>
                         <i data-feather="chevron-right"></i>
@@ -66,10 +77,10 @@
                 </a>
                 <ul class="collapse submenu list-unstyled" id="datatables" data-parent="#accordionExample">
                     <li class="active">
-                        <a href="{{ route('transaksi.index') }}"> Add Transaksi </a>
+                        <a href="{{ route('dompet.index') }}">Dompet</a>
                     </li>
                     <li>
-                        <a href="table_dt_striped_table.html"> Striped Table </a>
+                        <a href="{{ route('user.index') }}">User</a>
                     </li>
                 </ul>
             </li>

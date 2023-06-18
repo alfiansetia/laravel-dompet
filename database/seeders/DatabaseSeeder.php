@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DompetSeeder::class,
             TransaksiSeeder::class,
+            CapitalSeeder::class,
+            ExpenditureSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
 

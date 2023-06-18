@@ -15,7 +15,7 @@ class TransaksiSeeder extends Seeder
      */
     public function run()
     {
-        Transaksi::create([
+        $transaksi = Transaksi::create([
             'date'      => date('Y-m-d H:i:s'),
             'user_id'   => 2,
             'from_id'   => 1,
@@ -26,5 +26,8 @@ class TransaksiSeeder extends Seeder
             'status'    => 'success',
             'desc'      => null,
         ]);
+
+        $transaksi->from->update(['saldo' => $transaksi->from->saldo - $transaksi->amount - $transaksi->cost]);
+        $transaksi->to->update(['saldo' => $transaksi->to->saldo + $transaksi->amount + $transaksi->revenue - $transaksi->cost]);
     }
 }
