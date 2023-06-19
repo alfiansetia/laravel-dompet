@@ -14,8 +14,8 @@ class CapitalController extends Controller
 
     public function __construct()
     {
-        $this->middleware('admin');
-        $this->middleware('active')->only(['store', 'update', 'destroy']);
+        $this->middleware('admin')->only(['destroy']);
+        $this->middleware('active');
         $this->comp = Comp::first();
     }
 

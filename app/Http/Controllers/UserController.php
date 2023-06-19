@@ -16,8 +16,8 @@ class UserController extends Controller
 
     public function __construct()
     {
-        $this->middleware('admin');
-        $this->middleware('active')->only(['store', 'update', 'destroy', 'profileUpdate']);
+        $this->middleware('admin')->except(['profile', 'profileUpdate', 'passwordUpdate']);
+        $this->middleware('active')->except(['profile']);
         $this->comp = Comp::first();
     }
 
@@ -51,7 +51,6 @@ class UserController extends Controller
             'role'      => 'required|in:admin,user',
             'status'    => 'required|in:active,nonactive',
         ]);
-
         $user = User::create([
             'name'      => $request->name,
             'email'     => $request->email,
@@ -114,7 +113,6 @@ class UserController extends Controller
             'name'      => $request->name,
             'email'     => $request->email,
             'phone'     => $request->phone,
-            'password'  => Hash::make($request->password),
             'role'      => $request->role,
             'status'    => $request->status,
         ]);

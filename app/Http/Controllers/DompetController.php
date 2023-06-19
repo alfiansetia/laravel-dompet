@@ -13,8 +13,8 @@ class DompetController extends Controller
 
     public function __construct()
     {
-        $this->middleware('admin');
-        $this->middleware('active')->only(['store', 'update', 'destroy']);
+        $this->middleware('admin')->except(['index', 'show']);
+        $this->middleware('active');
         $this->comp = Comp::first();
     }
 

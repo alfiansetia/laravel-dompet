@@ -17,7 +17,7 @@ class TransaksiController extends Controller
     public function __construct()
     {
         $this->middleware('admin')->only(['destroy']);
-        $this->middleware('active')->only(['store', 'update', 'destroy']);
+        $this->middleware('active');
         $this->comp = Comp::first();
     }
 

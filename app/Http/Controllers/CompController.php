@@ -12,8 +12,7 @@ class CompController extends Controller
 
     public function __construct()
     {
-        $this->middleware('admin');
-        $this->middleware('active')->only(['store', 'update']);
+        $this->middleware(['admin', 'active']);
         $this->comp = Comp::first();
     }
 
