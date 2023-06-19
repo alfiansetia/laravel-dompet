@@ -15,6 +15,8 @@ class UserController extends Controller
 
     public function __construct()
     {
+        $this->middleware('admin');
+        $this->middleware('active')->only(['store', 'update', 'destroy', 'profileUpdate']);
         $this->comp = Comp::first();
     }
 
@@ -46,6 +48,7 @@ class UserController extends Controller
             'phone'     => 'required|numeric|min:10|max:15',
             'password'  => 'required|min:5',
             'role'      => 'required|in:admin,user',
+            'status'    => 'required|in:active,nonactive',
         ]);
 
         $user = User::create([
@@ -54,6 +57,7 @@ class UserController extends Controller
             'phone'     => $request->phone,
             'password'  => Hash::make($request->password),
             'role'      => $request->role,
+            'status'    => $request->status,
         ]);
         if ($user) {
             return response()->json(['status' => true, 'message' => 'Success insert data!', 'data' => '']);
@@ -97,6 +101,7 @@ class UserController extends Controller
             'phone'     => 'required|numeric|digits_between:10,15',
             'password'  => 'nullable|min:5',
             'role'      => 'required|in:admin,user',
+            'status'    => 'required|in:active,nonactive',
         ]);
 
         if ($request->filled('password')) {
@@ -110,6 +115,7 @@ class UserController extends Controller
             'phone'     => $request->phone,
             'password'  => Hash::make($request->password),
             'role'      => $request->role,
+            'status'    => $request->status,
         ]);
         if ($user) {
             return response()->json(['status' => true, 'message' => 'Success update data!', 'data' => '']);

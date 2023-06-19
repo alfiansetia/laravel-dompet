@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->enum('avatar', ['boy1.png', 'boy2.png', 'girl1.png', 'girl2.png'])->default('boy1.png');
             $table->enum('role', ['admin', 'user'])->default('user');
+            $table->enum('status', ['active', 'nonactive'])->default('active');
             $table->rememberToken();
             $table->timestamps();
         });

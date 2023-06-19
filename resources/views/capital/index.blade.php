@@ -320,8 +320,8 @@
                     },
                     error: function(xhr, status, error) {
                         unblock();
-                        er = xhr.responseJSON.errors
                         if (xhr.status == 422) {
+                            er = xhr.responseJSON.errors
                             erlen = Object.keys(er).length
                             for (i = 0; i < erlen; i++) {
                                 obname = Object.keys(er)[i];
@@ -397,9 +397,9 @@
                     },
                     error: function(xhr, status, error) {
                         unblock();
-                        er = xhr.responseJSON.errors
-                        erlen = Object.keys(er).length
                         if (xhr.status == 422) {
+                            er = xhr.responseJSON.errors
+                            erlen = Object.keys(er).length
                             for (i = 0; i < erlen; i++) {
                                 obname = Object.keys(er)[i];
                                 $('#' + obname).addClass('is-invalid');
@@ -467,7 +467,6 @@
                         },
                         error: function(xhr, status, error) {
                             unblock();
-                            er = xhr.responseJSON.errors
                             swal(
                                 'Failed!',
                                 xhr.responseJSON.message,
@@ -520,7 +519,6 @@
                 },
                 error: function(xhr, status, error) {
                     unblock();
-                    er = xhr.responseJSON.errors
                     swal(
                         'Failed!',
                         xhr.responseJSON.message,

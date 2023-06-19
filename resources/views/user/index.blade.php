@@ -20,6 +20,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th class="text-center">Role</th>
+                                    <th class="text-center">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,6 +81,15 @@
                                 <option value="user">User</option>
                             </select>
                             <span id="err_role" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="status"><i class="fas fa-user-tag mr-1"
+                                    data-toggle="tooltip" title="Status User"></i>Status :</label>
+                            <select name="status" id="status" class="form-control" style="width: 100%;" required>
+                                <option value="active">Active</option>
+                                <option value="nonactive">Nonactive</option>
+                            </select>
+                            <span id="err_status" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -152,6 +162,16 @@
                             </select>
                             <span id="err_edit_role" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label" for="edit_status"><i class="fas fa-user-tag mr-1"
+                                    data-toggle="tooltip" title="Status User"></i>Status :</label>
+                            <select name="status" id="edit_status" class="form-control" style="width: 100%;" required>
+                                <option value="">Select Status</option>
+                                <option value="active">Active</option>
+                                <option value="nonactive">Nonactive</option>
+                            </select>
+                            <span id="err_edit_status" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"
@@ -209,7 +229,7 @@
                 className: "dt-no-sorting",
                 orderable: false,
             }, {
-                targets: [0, 4],
+                targets: [0, 4, 5],
                 className: "text-center",
             }],
             columns: [{
@@ -238,7 +258,17 @@
                         return data
                     }
                 }
-            }, ],
+            }, {
+                title: 'Status',
+                data: 'status',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return `<span class="badge badge-${data == 'active' ? 'success' : 'danger'}">${data}</span>`
+                    } else {
+                        return data
+                    }
+                }
+            }],
             buttons: [, {
                 text: '<i class="fa fa-plus"></i>Add',
                 className: 'btn btn-sm btn-primary bs-tooltip',
@@ -367,9 +397,9 @@
                     },
                     error: function(xhr, status, error) {
                         unblock();
-                        er = xhr.responseJSON.errors
-                        erlen = Object.keys(er).length
                         if (xhr.status == 422) {
+                            er = xhr.responseJSON.errors
+                            erlen = Object.keys(er).length
                             for (i = 0; i < erlen; i++) {
                                 obname = Object.keys(er)[i];
                                 $('#' + obname).addClass('is-invalid');
@@ -453,8 +483,8 @@
                     },
                     error: function(xhr, status, error) {
                         unblock();
-                        er = xhr.responseJSON.errors
                         if (xhr.status == 422) {
+                            er = xhr.responseJSON.errors
                             erlen = Object.keys(er).length
                             for (i = 0; i < erlen; i++) {
                                 obname = Object.keys(er)[i];
@@ -490,6 +520,7 @@
                         $('#edit_phone').val(result.data.phone);
                         $('#edit_password').val('');
                         $('#edit_role').val(result.data.role).change();
+                        $('#edit_status').val(result.data.status).change();
                         if (show) {
                             $('#modalEdit').modal('show');
                         }
@@ -506,7 +537,6 @@
                 },
                 error: function(xhr, status, error) {
                     unblock();
-                    er = xhr.responseJSON.errors
                     swal(
                         'Failed!',
                         xhr.responseJSON.message,
@@ -564,7 +594,6 @@
                             },
                             error: function(xhr, status, error) {
                                 unblock();
-                                er = xhr.responseJSON.errors
                                 if (xhr.status == 500) {
                                     swal(
                                         'Failed!',
