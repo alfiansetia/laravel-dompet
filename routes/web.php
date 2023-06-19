@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::post('user/profile', [UserController::class, 'profileUpdate'])->name('user.profile.update');
+    Route::get('user/password', [UserController::class, 'profile'])->name('user.password');
+    Route::post('user/password', [UserController::class, 'passwordUpdate'])->name('user.password.update');
     Route::resource('user', UserController::class)->only(['index', 'store', 'show', 'update']);
     Route::delete('user', [UserController::class, 'destroy'])->name('user.destroy');
 

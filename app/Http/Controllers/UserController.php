@@ -6,6 +6,7 @@ use App\Models\Comp;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
@@ -170,7 +171,24 @@ class UserController extends Controller
         if ($user) {
             return redirect()->route('user.profile')->with(['success' => 'Success update data!']);
         } else {
-            return redirect()->route('user.profile')->with(['errorr' => 'Success update data!']);
+            return redirect()->route('user.profile')->with(['errorr' => 'Failed update data!']);
+        }
+    }
+
+
+    public function passwordUpdate(Request $request)
+    {
+        $this->validate($request, [
+            'password'          => ['required', Password::min(5)->numbers()],
+            'confirm_password'  => ['required', 'same:password'],
+        ]);
+        $user = auth()->user()->update([
+            'password'   => Hash::make($request->password),
+        ]);
+        if ($user) {
+            return redirect()->route('user.profile')->with(['success' => 'Success Change Password!']);
+        } else {
+            return redirect()->route('user.profile')->with(['errorr' => 'Failed Change Password!']);
         }
     }
 }
