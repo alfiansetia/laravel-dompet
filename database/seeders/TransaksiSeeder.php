@@ -20,14 +20,14 @@ class TransaksiSeeder extends Seeder
             'user_id'   => 2,
             'from_id'   => 1,
             'to_id'     => 2,
-            'amount'    => 20000,
+            'amount'    => 51000,
             'cost'      => 0,
-            'revenue'   => 0,
+            'revenue'   => 4000,
             'status'    => 'success',
-            'desc'      => null,
+            'desc'      => 'Tarik tunai',
         ]);
 
-        $transaksi->from->update(['saldo' => $transaksi->from->saldo - $transaksi->amount - $transaksi->cost]);
-        $transaksi->to->update(['saldo' => $transaksi->to->saldo + $transaksi->amount + $transaksi->revenue - $transaksi->cost]);
+        $transaksi->from->update(['saldo' => $transaksi->from->saldo - ($transaksi->amount + $transaksi->cost)]);
+        $transaksi->to->update(['saldo' => $transaksi->to->saldo + $transaksi->amount + $transaksi->revenue]);
     }
 }

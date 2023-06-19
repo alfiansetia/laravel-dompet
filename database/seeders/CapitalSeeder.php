@@ -15,6 +15,18 @@ class CapitalSeeder extends Seeder
      */
     public function run()
     {
+        $saldo = Capital::create([
+            'user_id'   => 2,
+            'date'      => date('Y-m-d H:i:s'),
+            'dompet_id' => 2,
+            'amount'    => 2300,
+            'desc'      => 'Saldo saleho',
+        ]);
+
+        $saldo->dompet->update([
+            'saldo' => $saldo->dompet->saldo + $saldo->amount
+        ]);
+
         $cap1 = Capital::create([
             'user_id'   => 2,
             'date'      => date('Y-m-d H:i:s'),
