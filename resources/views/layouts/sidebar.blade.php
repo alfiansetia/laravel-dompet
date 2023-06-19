@@ -13,26 +13,6 @@
                 </a>
             </li>
             <li class="menu">
-                <a href="{{ route('user.index') }}" data-active="{{ $title == 'Data User' ? 'true' : 'false' }}"
-                    aria-expanded="{{ $title == 'Data User' ? 'true' : 'false' }}" class="dropdown-toggle">
-                    <div class="">
-                        <i data-feather="user"></i>
-                        <span>User</span>
-                    </div>
-                </a>
-            </li>
-
-            <li class="menu">
-                <a href="{{ route('dompet.index') }}" data-active="{{ $title == 'Data Dompet' ? 'true' : 'false' }}"
-                    aria-expanded="{{ $title == 'Data Dompet' ? 'true' : 'false' }}" class="dropdown-toggle">
-                    <div class="">
-                        <i data-feather="dollar-sign"></i>
-                        <span>Dompet</span>
-                    </div>
-                </a>
-            </li>
-
-            <li class="menu">
                 <a href="{{ route('transaksi.index') }}"
                     data-active="{{ $title == 'Data Transaksi' ? 'true' : 'false' }}"
                     aria-expanded="{{ $title == 'Data Transaksi' ? 'true' : 'false' }}" class="dropdown-toggle">
@@ -48,7 +28,7 @@
                     aria-expanded="{{ $title == 'Data Capital' ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <i data-feather="download"></i>
-                        <span>Capital</span>
+                        <span>Pemasukan</span>
                     </div>
                 </a>
             </li>
@@ -59,40 +39,56 @@
                     aria-expanded="{{ $title == 'Data Expenditure' ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <i data-feather="upload"></i>
-                        <span>Expenditure</span>
+                        <span>Pengeluaran</span>
                     </div>
                 </a>
             </li>
-
             <li class="menu">
-                <a href="#datatables" data-toggle="collapse" data-active="false" aria-expanded="false"
+                <a href="#master_menu" data-toggle="collapse"
+                    data-active="{{ $title == 'Data User' || $title == 'Data Dompet' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'Data User' || $title == 'Data Dompet' ? 'true' : 'false' }}"
                     class="dropdown-toggle">
                     <div class="">
-                        <i data-feather="layers"></i>
+                        <i data-feather="hard-drive"></i>
                         <span>Master Data</span>
                     </div>
                     <div>
                         <i data-feather="chevron-right"></i>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled" id="datatables" data-parent="#accordionExample">
-                    <li class="active">
+                <ul class="collapse submenu list-unstyled {{ $title == 'Data User' || $title == 'Data Dompet' ? 'show' : '' }}"
+                    id="master_menu" data-parent="#accordionExample">
+                    <li class="{{ $title == 'Data Dompet' ? 'active' : '' }}">
                         <a href="{{ route('dompet.index') }}">Dompet</a>
                     </li>
-                    <li>
+                    <li class="{{ $title == 'Data User' ? 'active' : '' }}">
                         <a href="{{ route('user.index') }}">User</a>
                     </li>
                 </ul>
             </li>
 
             <li class="menu">
-                <a href="{{ route('comp.index') }}" data-active="{{ $title == 'Company Setting' ? 'true' : 'false' }}"
-                    aria-expanded="{{ $title == 'Company Setting' ? 'true' : 'false' }}" class="dropdown-toggle">
+                <a href="#settings_menu" data-toggle="collapse"
+                    data-active="{{ $title == 'User Profile' || $title == 'Company Setting' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'User Profile' || $title == 'Company Setting' ? 'true' : 'false' }}"
+                    class="dropdown-toggle">
                     <div class="">
-                        <i data-feather="upload"></i>
-                        <span>Company Setting</span>
+                        <i data-feather="sliders"></i>
+                        <span>Settings</span>
+                    </div>
+                    <div>
+                        <i data-feather="chevron-right"></i>
                     </div>
                 </a>
+                <ul class="collapse submenu list-unstyled {{ $title == 'User Profile' || $title == 'Company Setting' ? 'show' : '' }}"
+                    id="settings_menu" data-parent="#accordionExample">
+                    <li class="{{ $title == 'User Profile' ? 'active' : '' }}">
+                        <a href="{{ route('user.profile') }}">Profile</a>
+                    </li>
+                    <li class="{{ $title == 'Company Setting' ? 'active' : '' }}">
+                        <a href="{{ route('comp.index') }}">Company</a>
+                    </li>
+                </ul>
             </li>
         </ul>
 

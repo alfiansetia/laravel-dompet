@@ -186,15 +186,20 @@
         <a href="javascript:void(0);" class="sidebarCollapse" data-placement="bottom">
             <i data-feather="menu"></i>
         </a>
-
         <ul class="navbar-nav flex-row">
             <li>
                 <div class="page-header">
 
                     <nav class="breadcrumb-one" aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0);">DataTables</a></li>
-                            <li class="breadcrumb-item active" aria-current="page"><span>Basic</span></li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ $title == 'Dashboard' ? 'javascript:void(0);' : route('home') }}">Home</a>
+                            </li>
+                            @if ($title != 'Dashboard')
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    <span>{{ $title }}</span>
+                                </li>
+                            @endif
                         </ol>
                     </nav>
 
