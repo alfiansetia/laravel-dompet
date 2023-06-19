@@ -189,15 +189,6 @@
                 alwaysShow: true
             });
 
-            $('.mask-angka').inputmask({
-                alias: 'numeric',
-                groupSeparator: '.',
-                autoGroup: true,
-                digits: 0,
-                rightAlign: false,
-                removeMaskOnSubmit: true,
-            });
-
             $('#sell').on('input', function() {
                 set_revenue()
             })
@@ -207,12 +198,19 @@
             })
         })
 
+        $('.mask-angka').inputmask({
+            alias: 'numeric',
+            groupSeparator: '.',
+            autoGroup: true,
+            digits: 0,
+            rightAlign: false,
+            removeMaskOnSubmit: true,
+        });
+
         function set_revenue() {
             let sell = $('#sell').inputmask('unmaskedvalue') ?? 0
             let amount = $('#amount').inputmask('unmaskedvalue') ?? 0
-            // var revenue = sell - amount
             if (sell < amount || (sell - amount) < 0) {
-                // revenue = 0
                 $('#sell').addClass('is-invalid');
                 $('#err_sell').text('Harga jual tidak boleh lebih rendah dari harga amount');
                 $('#err_sell').show();
@@ -223,7 +221,6 @@
                 $('#revenue').val(sell - amount)
             }
         }
-
 
         $('#modalAdd').on('shown.bs.modal', function() {
             set_from()
@@ -665,7 +662,6 @@
                     $('#to').append(newOption);
                 }
             }).fail(function(xhr) {
-                console.log(xhr);
                 $('#modalAdd').modal('hide')
                 swal(
                     'Failed!',
