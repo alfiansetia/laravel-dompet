@@ -53,7 +53,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="amount">Amount :</label>
-                            <input type="text" name="amount" class="form-control maxlength" id="amount"
+                            <input type="text" name="amount" class="form-control maxlength mask-angka" id="amount"
                                 placeholder="Please Enter Amount" min="1" value="0" required>
                             <span id="err_amount" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
@@ -133,14 +133,29 @@
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
-
     <script src="{{ asset('plugins/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-maxlength/custom-bs-maxlength.js') }}"></script>
 
     <script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
+    <script src="{{ asset('plugins/input-mask/jquery.inputmask.bundle.min.js') }}"></script>
+
     <script>
+        $('.maxlength').maxlength({
+            placement: "top",
+            alwaysShow: true
+        });
+
+        $('.mask-angka').inputmask({
+            alias: 'numeric',
+            groupSeparator: '.',
+            autoGroup: true,
+            digits: 0,
+            rightAlign: false,
+            removeMaskOnSubmit: true,
+        });
+
         $('#modalAdd').on('shown.bs.modal', function() {
             set_dompet()
         });
@@ -538,6 +553,14 @@
                     }
                     $('#dompet').append(newOption);
                 }
+            }).fail(function(xhr) {
+                console.log(xhr);
+                $('#modalAdd').modal('hide')
+                swal(
+                    'Failed!',
+                    xhr.responseJSON.message,
+                    'error'
+                )
             })
         }
     </script>

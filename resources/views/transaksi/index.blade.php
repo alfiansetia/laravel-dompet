@@ -49,37 +49,44 @@
                 <div class="modal-body">
                     <form id="form" class="form-vertical" action="" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label class="control-label" for="from"></i>From :</label>
+                            <label class="control-label" for="from"></i>Dari :</label>
                             <select name="from" id="from" class="form-control" style="width: 100%;" required>
                             </select>
                             <span id="err_from" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="to"></i>To :</label>
+                            <label class="control-label" for="to"></i>Ke :</label>
                             <select name="to" id="to" class="form-control" style="width: 100%;" required>
                             </select>
                             <span id="err_to" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="amount">Amount :</label>
-                            <input type="text" name="amount" class="form-control maxlength" id="amount"
+                            <label class="control-label" for="amount">Jumlah :</label>
+                            <input type="text" name="amount" class="form-control maxlength mask-angka" id="amount"
                                 placeholder="Please Enter Amount" min="1" value="0" required>
                             <span id="err_amount" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="cost">Cost :</label>
-                            <input type="text" name="cost" class="form-control maxlength" id="cost"
+                            <label class="control-label" for="cost">Biaya :</label>
+                            <input type="text" name="cost" class="form-control maxlength mask-angka" id="cost"
                                 placeholder="Please Enter Cost" min="0" value="0">
                             <span id="err_cost" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="revenue">Revenue :</label>
-                            <input type="text" name="revenue" class="form-control maxlength" id="revenue"
-                                placeholder="Please Enter Revenue" min="0" value="0">
+                            <label class="control-label" for="sell">Harga Jual :</label>
+                            <input type="text" name="sell" class="form-control maxlength mask-angka" id="sell"
+                                placeholder="Please Enter sell" min="0" value="0">
+                            <span id="err_sell" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="revenue">Keuntungan :</label>
+                            <input type="text" name="revenue" class="form-control maxlength mask-angka"
+                                id="revenue" placeholder="Please Enter Revenue" min="0" value="0"
+                                readonly>
                             <span id="err_revenue" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="desc">Desc :</label>
+                            <label class="control-label" for="desc">Catatan :</label>
                             <textarea name="desc" id="desc" class="form-control maxlength" minlength="0" maxlength="100"></textarea>
                             <span id="err_desc" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
@@ -173,7 +180,51 @@
     <script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
+    <script src="{{ asset('plugins/input-mask/jquery.inputmask.bundle.min.js') }}"></script>
+
     <script>
+        $(document).ready(function() {
+            $('.maxlength').maxlength({
+                placement: "top",
+                alwaysShow: true
+            });
+
+            $('.mask-angka').inputmask({
+                alias: 'numeric',
+                groupSeparator: '.',
+                autoGroup: true,
+                digits: 0,
+                rightAlign: false,
+                removeMaskOnSubmit: true,
+            });
+
+            $('#sell').on('input', function() {
+                set_revenue()
+            })
+
+            $('#amount').on('input', function() {
+                set_revenue()
+            })
+        })
+
+        function set_revenue() {
+            let sell = $('#sell').inputmask('unmaskedvalue') ?? 0
+            let amount = $('#amount').inputmask('unmaskedvalue') ?? 0
+            // var revenue = sell - amount
+            if (sell < amount || (sell - amount) < 0) {
+                // revenue = 0
+                $('#sell').addClass('is-invalid');
+                $('#err_sell').text('Harga jual tidak boleh lebih rendah dari harga amount');
+                $('#err_sell').show();
+                $('#revenue').val(0)
+            } else {
+                $('#sell').removeClass('is-invalid');
+                $('#err_sell').hide();
+                $('#revenue').val(sell - amount)
+            }
+        }
+
+
         $('#modalAdd').on('shown.bs.modal', function() {
             set_from()
             set_to()
@@ -596,6 +647,13 @@
                     }
                     $('#from').append(newOption);
                 }
+            }).fail(function(xhr) {
+                $('#modalAdd').modal('hide')
+                swal(
+                    'Failed!',
+                    xhr.responseJSON.message,
+                    'error'
+                )
             })
         }
 
@@ -606,6 +664,14 @@
                     let newOption = new Option(res.data[i].name, res.data[i].id);
                     $('#to').append(newOption);
                 }
+            }).fail(function(xhr) {
+                console.log(xhr);
+                $('#modalAdd').modal('hide')
+                swal(
+                    'Failed!',
+                    xhr.responseJSON.message,
+                    'error'
+                )
             })
         }
     </script>
