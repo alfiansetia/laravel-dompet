@@ -136,7 +136,7 @@
 
             <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
                 <div class="widget-content widget-content-area br-6">
-                    <form id="work-experience" method="POST" action="{{ route('user.password.update') }}">
+                    <form id="change-password" method="POST" action="{{ route('user.password.update') }}">
                         @csrf
                         <div class="info">
                             <h5 class="">Change Password</h5>
