@@ -41,12 +41,7 @@ class HomeController extends Controller
 
     public function getStat()
     {
-        $data['total'] = Dompet::sum('saldo');
-        $data['revenue'] = Transaksi::where('status', 'success')->sum('revenue');
-        $data['cost'] = Transaksi::where('status', 'success')->sum('cost');
-        $data['capital'] = Capital::where('status', 'success')->sum('amount');
-        $data['expenditure'] = Expenditure::where('status', 'success')->sum('amount');
-        $data['profit'] = $data['total'] - ($data['capital'] - $data['expenditure']);
+        $data['profit'] = Dompet::selectRaw('SUM(saldo) - (SELECT SUM(amount) FROM capitals WHERE status = "success") as profit')->value('profit');
         return response()->json(['status' => true, 'message' => '', 'data' => $data]);
     }
 }
