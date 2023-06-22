@@ -113,7 +113,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 @push('js')
     <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
@@ -127,7 +126,7 @@
                 get_data()
                 unblock()
             })
-            
+
             get_chart();
             get_data();
 
@@ -370,10 +369,11 @@
                 $('#value_profit').text('Rp. ' + hrg(profit))
 
                 let progressValue = parseInt(profit) * 100 / parseInt(modal);
+                let prog = progressValue.toFixed(2)
 
-                $('#profit_progress .progress-bar').css('width', progressValue + '%');
-                $('#profit_progress .progress-bar').attr('aria-valuenow', progressValue);
-                $('#profit_percent').text(progressValue + '%');
+                $('#profit_progress .progress-bar').css('width', prog + '%');
+                $('#profit_progress .progress-bar').attr('aria-valuenow', prog);
+                $('#profit_percent').text(prog + '%');
 
                 feather.replace();
             }).fail(function(xhr) {
