@@ -72,7 +72,7 @@
                     <div class="widget-content">
                         <div class="w-header">
                             <div class="w-info">
-                                <h6 class="value">Total Profit</h6>
+                                <h6 class="value">Sisa Profit</h6>
                             </div>
                             <div class="task-action">
                                 <div class="dropdown">
