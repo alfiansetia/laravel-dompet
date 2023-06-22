@@ -201,30 +201,6 @@
                     size: 4
                 }]
             },
-            subtitle: {
-                text: 'Loading..',
-                align: 'left',
-                margin: 0,
-                offsetX: 95,
-                offsetY: 0,
-                floating: false,
-                style: {
-                    fontSize: '18px',
-                    color: '#4361ee'
-                }
-            },
-            title: {
-                text: 'Total Profit',
-                align: 'left',
-                margin: 0,
-                offsetX: -10,
-                offsetY: 0,
-                floating: false,
-                style: {
-                    fontSize: '18px',
-                    color: '#0e1726'
-                },
-            },
             stroke: {
                 show: true,
                 curve: 'smooth',
@@ -398,17 +374,6 @@
                 name: 'Revenue',
                 data: newData
             }]);
-
-            let total = 0;
-            for (let i = 0; i < newData.length; i++) {
-                total = total + parseInt(newData[i])
-            }
-
-            chart.updateOptions({
-                subtitle: {
-                    text: 'Rp. ' + hrg(total)
-                }
-            });
         }
 
         var clas = ['profit', 'income', 'expenses'];
