@@ -35,7 +35,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/home/getdata', [HomeController::class, 'getData'])->name('home.get.data');
-    Route::get('/home/getstat', [HomeController::class, 'getStat'])->name('home.get.stat');
+    Route::get('/home/getchart', [HomeController::class, 'getChart'])->name('home.get.chart');
 
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::post('user/profile', [UserController::class, 'profileUpdate'])->name('user.profile.update');
