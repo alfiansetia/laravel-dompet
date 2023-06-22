@@ -37,7 +37,7 @@ class HomeController extends Controller
 
     public function getData()
     {
-        $data['profit'] = Dompet::selectRaw('SUM(saldo) - (SELECT SUM(amount) FROM capitals WHERE status = "success") as profit')->value('profit') - 10000;
+        $data['profit'] = Dompet::selectRaw('SUM(saldo) - (SELECT SUM(amount) FROM capitals WHERE status = "success") as profit')->value('profit');
         $data['dompet'] = Dompet::orderBy('saldo', 'desc')->paginate(5);
         $data['modal'] = Capital::where('status', 'success')->sum('amount');
         return response()->json(['status' => true, 'message' => '', 'data' => $data]);
