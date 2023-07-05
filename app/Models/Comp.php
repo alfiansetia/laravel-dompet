@@ -25,7 +25,7 @@ class Comp extends Model
         if ($value) {
             return url('/images/company/' . $value);
         } else {
-            return url('/images/company/favicon.ico');
+            return url('/images/company/favicon.png');
         }
     }
 }

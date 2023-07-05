@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <title>{{ $title }} | {{ $comp->name }} </title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon.ico') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ $comp->fav }}" />
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
     <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
@@ -24,7 +24,9 @@
             <div class="form-form-wrap">
                 <div class="form-container">
                     <div class="form-content">
-
+                        <div class="mb-3">
+                            <img src="{{ $comp->logo }}" alt="" width="120">
+                        </div>
                         <h1 class="">Sign In</h1>
                         <p class="">Log in to your account to continue.</p>
 
@@ -108,7 +110,7 @@
 
         })
 
-        function forgot(){
+        function forgot() {
             alert("Hubungi Admin!")
         }
 
@@ -140,6 +142,5 @@
     </script>
 
 </body>
-
 
 </html>
