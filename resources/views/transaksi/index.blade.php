@@ -210,15 +210,16 @@
         function set_revenue() {
             let sell = $('#sell').inputmask('unmaskedvalue') ?? 0
             let amount = $('#amount').inputmask('unmaskedvalue') ?? 0
-            if (sell < amount || (sell - amount) < 0) {
+            let selisih = sell - amount
+            if (selisih < 0) {
                 $('#sell').addClass('is-invalid');
-                $('#err_sell').text('Harga jual tidak boleh lebih rendah dari harga amount');
+                $('#err_sell').text('Harga jual tidak boleh lebih rendah dari harga beli');
                 $('#err_sell').show();
                 $('#revenue').val(0)
             } else {
                 $('#sell').removeClass('is-invalid');
                 $('#err_sell').hide();
-                $('#revenue').val(sell - amount)
+                $('#revenue').val(selisih)
             }
         }
 
