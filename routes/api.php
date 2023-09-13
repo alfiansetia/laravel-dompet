@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\TransaksiController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +17,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('user/profile', [UserController::class, 'profile']);
+    Route::put('user/profile', [UserController::class, 'profileUpdate']);
+
+    Route::post('logout', [LoginController::class, 'logout']);
+
+    Route::apiResource('transaksis', TransaksiController::class)->only(['index', 'show']);
+    // Route::get('transaksis/{transaksi}', [TransaksiController::class, 'show']);
+
+    Route::apiResource('users', UserController::class)->only(['index', 'show']);
+    // Route::get('users', [UserController::class, 'index']);
 });
+
+Route::post('login', [LoginController::class, 'login']);
