@@ -10,6 +10,12 @@ class Transaksi extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'amount'    => 'integer',
+        'cost'      => 'integer',
+        'revenue'   => 'integer',
+    ];
+
     function getNoAttribute()
     {
         $no = str_pad($this->id, 4, '0', STR_PAD_LEFT);
