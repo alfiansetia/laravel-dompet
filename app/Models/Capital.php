@@ -11,6 +11,10 @@ class Capital extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'amount'    => 'integer',
+    ];
+
     function user()
     {
         return $this->belongsTo(User::class);

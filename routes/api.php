@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\DompetController;
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\StatisticController;
 use App\Http\Controllers\Api\TransaksiController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -35,6 +36,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Route::get('users', [UserController::class, 'index']);
 
     Route::apiResource('dompets', DompetController::class)->only(['index', 'show']);
+
+    Route::get('statistics', [StatisticController::class, 'get']);
 });
 
 Route::post('login', [LoginController::class, 'login']);
