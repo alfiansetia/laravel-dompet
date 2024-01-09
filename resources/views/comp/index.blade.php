@@ -1,4 +1,4 @@
-@extends('components.template')
+@extends('layouts.template')
 
 @push('css')
     <link href="{{ asset('assets/css/users/account-setting.css') }}" rel="stylesheet" type="text/css" />

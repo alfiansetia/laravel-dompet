@@ -44,7 +44,7 @@
     <!--  END LOADER -->
 
     <!--  BEGIN NAVBAR  -->
-    @include('layouts.nav')
+    @include('components.nav')
     <!--  END NAVBAR  -->
 
 
@@ -55,7 +55,7 @@
         <div class="search-overlay"></div>
 
         <!--  BEGIN SIDEBAR  -->
-        @include('layouts.sidebar')
+        @include('components.sidebar')
         <!--  END SIDEBAR  -->
 
         <!--  BEGIN CONTENT AREA  -->
@@ -63,7 +63,7 @@
 
             @yield('content')
 
-            @include('layouts.footer')
+            @include('components.footer')
         </div>
         <!--  END CONTENT AREA  -->
     </div>
