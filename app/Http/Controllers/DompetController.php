@@ -9,13 +9,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class DompetController extends Controller
 {
-    private $comp;
-
     public function __construct()
     {
         $this->middleware('admin')->except(['index', 'show']);
         $this->middleware('active');
-        $this->comp = Comp::first();
     }
 
     /**
@@ -26,10 +23,10 @@ class DompetController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Dompet::get();
+            $data = Dompet::query();
             return DataTables::of($data)->toJson();
         }
-        return view('dompet.index')->with(['comp' => $this->comp, 'title' => 'Data Dompet']);
+        return view('dompet.index');
     }
 
     /**

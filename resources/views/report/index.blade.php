@@ -1,4 +1,4 @@
-@extends('layouts.template', ['title' => 'Data Expenditure'])
+@extends('layouts.template')
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/dt-global_style.css') }}">
@@ -18,8 +18,11 @@
                                     <th>NO</th>
                                     <th>Date</th>
                                     <th>User</th>
+                                    <th>From</th>
+                                    <th>To</th>
                                     <th>Amount</th>
-                                    <th>Dompet</th>
+                                    <th>Cost</th>
+                                    <th>Revenue</th>
                                     <th>Desc</th>
                                 </tr>
                             </thead>
@@ -46,19 +49,44 @@
                 <div class="modal-body">
                     <form id="form" class="form-vertical" action="" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label class="control-label" for="dompet"></i>Dompet :</label>
-                            <select name="dompet" id="dompet" class="form-control" style="width: 100%;" required>
+                            <label class="control-label" for="from"></i>Dari :</label>
+                            <select name="from" id="from" class="form-control" style="width: 100%;" required>
                             </select>
-                            <span id="err_dompet" class="error invalid-feedback" style="display: hide;"></span>
+                            <span id="err_from" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="amount">Amount :</label>
+                            <label class="control-label" for="to"></i>Ke :</label>
+                            <select name="to" id="to" class="form-control" style="width: 100%;" required>
+                            </select>
+                            <span id="err_to" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="amount">Jumlah :</label>
                             <input type="text" name="amount" class="form-control maxlength mask-angka" id="amount"
                                 placeholder="Please Enter Amount" min="1" value="0" required>
                             <span id="err_amount" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="desc">Desc :</label>
+                            <label class="control-label" for="cost">Biaya :</label>
+                            <input type="text" name="cost" class="form-control maxlength mask-angka" id="cost"
+                                placeholder="Please Enter Cost" min="0" value="0">
+                            <span id="err_cost" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="sell">Harga Jual :</label>
+                            <input type="text" name="sell" class="form-control maxlength mask-angka" id="sell"
+                                placeholder="Please Enter sell" min="0" value="0">
+                            <span id="err_sell" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="revenue">Keuntungan :</label>
+                            <input type="text" name="revenue" class="form-control maxlength mask-angka"
+                                id="revenue" placeholder="Please Enter Revenue" min="0" value="0"
+                                readonly>
+                            <span id="err_revenue" class="error invalid-feedback" style="display: hide;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="desc">Catatan :</label>
                             <textarea name="desc" id="desc" class="form-control maxlength" minlength="0" maxlength="100"></textarea>
                             <span id="err_desc" class="error invalid-feedback" style="display: hide;"></span>
                         </div>
@@ -68,8 +96,8 @@
                             data-toggle="tooltip" title="Close"></i>Close</button>
                     <button type="reset" id="reset" class="btn btn-warning"><i class="fas fa-undo mr-1"
                             data-toggle="tooltip" title="Reset"></i>Reset</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1" data-toggle="tooltip"
-                            title="Save"></i>Save</button>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1"
+                            data-toggle="tooltip" title="Save"></i>Save</button>
                 </div>
                 </form>
             </div>
@@ -101,12 +129,24 @@
                             <input type="text" class="form-control" id="edit_date" readonly>
                         </div>
                         <div class="form-group">
-                            <label class="control-label" for="edit_dompet">Dompet :</label>
-                            <input type="text" class="form-control" id="edit_dompet" readonly>
+                            <label class="control-label" for="edit_from">From :</label>
+                            <input type="text" class="form-control" id="edit_from" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="edit_to">To :</label>
+                            <input type="text" class="form-control" id="edit_to" readonly>
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="edit_amount">Amount :</label>
                             <input type="text" class="form-control" id="edit_amount" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="edit_cost">Cost :</label>
+                            <input type="text" class="form-control" id="edit_cost" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="edit_revenue">Revenue :</label>
+                            <input type="text" class="form-control" id="edit_revenue" readonly>
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="edit_desc">Desc :</label>
@@ -143,10 +183,20 @@
     <script src="{{ asset('plugins/input-mask/jquery.inputmask.bundle.min.js') }}"></script>
 
     <script>
-        $('.maxlength').maxlength({
-            placement: "top",
-            alwaysShow: true
-        });
+        $(document).ready(function() {
+            $('.maxlength').maxlength({
+                placement: "top",
+                alwaysShow: true
+            });
+
+            $('#sell').on('input', function() {
+                set_revenue()
+            })
+
+            $('#amount').on('input', function() {
+                set_revenue()
+            })
+        })
 
         $('.mask-angka').inputmask({
             alias: 'numeric',
@@ -157,15 +207,32 @@
             removeMaskOnSubmit: true,
         });
 
+        function set_revenue() {
+            let sell = $('#sell').inputmask('unmaskedvalue') ?? 0
+            let amount = $('#amount').inputmask('unmaskedvalue') ?? 0
+            let selisih = sell - amount
+            if (selisih < 0) {
+                $('#sell').addClass('is-invalid');
+                $('#err_sell').text('Harga jual tidak boleh lebih rendah dari harga beli');
+                $('#err_sell').show();
+                $('#revenue').val(0)
+            } else {
+                $('#sell').removeClass('is-invalid');
+                $('#err_sell').hide();
+                $('#revenue').val(selisih)
+            }
+        }
+
         $('#modalAdd').on('shown.bs.modal', function() {
-            set_dompet()
+            set_from()
+            set_to()
         });
 
         var table = $('#table').DataTable({
             processing: true,
             serverSide: true,
             rowId: 'id',
-            ajax: "{{ route('expenditure.index') }}",
+            ajax: "{{ route('transaksi.index') }}",
             dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
                 "<'table-responsive'tr>" +
                 "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
@@ -213,8 +280,11 @@
                     }
                 }
             }, {
-                title: "Dompet",
-                data: 'dompet.name',
+                title: "From",
+                data: 'from.name',
+            }, {
+                title: "To",
+                data: 'to.name',
             }, {
                 title: "Amount",
                 data: 'amount',
@@ -226,8 +296,31 @@
                     }
                 }
             }, {
+                title: 'Cost',
+                data: 'cost',
+                visible: false,
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return hrg(data)
+                    } else {
+                        return data
+                    }
+                }
+            }, {
+                title: 'Revenue',
+                data: 'revenue',
+                visible: false,
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return hrg(data)
+                    } else {
+                        return data
+                    }
+                }
+            }, {
                 title: 'Desc',
                 data: 'desc',
+                visible: false,
             }],
             buttons: [{
                 text: '<i class="fa fa-plus"></i>Add',
@@ -270,12 +363,6 @@
         var id;
 
         $('#table tbody').on('click', 'tr td', function() {
-            $('#formEdit .error.invalid-feedback').each(function(i) {
-                $(this).hide();
-            });
-            $('#formEdit input.is-invalid').each(function(i) {
-                $(this).removeClass('is-invalid');
-            });
             id = table.row(this).id()
             edit(id, true)
         });
@@ -304,7 +391,7 @@
                 });
                 $.ajax({
                     type: 'POST',
-                    url: "{{ route('expenditure.store') }}",
+                    url: "{{ route('transaksi.store') }}",
                     data: $(formData).serialize(),
                     beforeSend: function() {
                         block();
@@ -379,7 +466,7 @@
                     }
                 });
                 var formData1 = form;
-                let url = "{{ route('expenditure.update', ':id') }}";
+                let url = "{{ route('transaksi.update', ':id') }}";
                 url = url.replace(':id', id);
                 $.ajax({
                     type: 'POST',
@@ -437,7 +524,7 @@
         $('#edit_reset').click(function() {
             let id = $(this).val();
             swal({
-                title: 'Cancel capital?',
+                title: 'Cancel Transaksi?',
                 text: "You won't be able to revert this!",
                 type: 'warning',
                 showCancelButton: true,
@@ -450,7 +537,7 @@
                 customClass: 'animated tada',
             }).then(function(result) {
                 if (result.value) {
-                    let url = "{{ route('expenditure.destroy', ':id') }}";
+                    let url = "{{ route('transaksi.destroy', ':id') }}";
                     url = url.replace(':id', id);
                     $.ajaxSetup({
                         headers: {
@@ -495,7 +582,7 @@
         })
 
         function edit(id, show = false) {
-            let url = "{{ route('expenditure.show', ':id') }}";
+            let url = "{{ route('transaksi.show', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 url: url,
@@ -507,8 +594,11 @@
                         $('#edit_id').val(result.data.id);
                         $('#edit_date').val(result.data.date);
                         $('#edit_user').val(result.data.user.name)
-                        $('#edit_dompet').val(result.data.dompet.name)
+                        $('#edit_from').val(result.data.from.name)
+                        $('#edit_to').val(result.data.to.name)
                         $('#edit_amount').val(hrg(result.data.amount));
+                        $('#edit_cost').val(hrg(result.data.cost));
+                        $('#edit_revenue').val(hrg(result.data.revenue));
                         $('#edit_desc').val(result.data.desc);
                         if (result.data.status == 'success') {
                             $('#edit_reset').prop('disabled', false)
@@ -517,8 +607,9 @@
                         }
                         $('.title-edit').remove()
                         $('#titleEdit').append(
-                            `<span class="badge title-edit ml-2 badge-${result.data.status == 'success' ? 'success' : 'danger'}">EXP-${result.data.id}`
+                            `<span class="badge title-edit ml-2 badge-${result.data.status == 'success' ? 'success' : 'danger'}">TRX-${result.data.id}`
                         )
+
                         if (show) {
                             $('#modalEdit').modal('show');
                         }
@@ -544,18 +635,34 @@
             });
         }
 
-        function set_dompet() {
-            $('#dompet').empty()
+        function set_from() {
+            $('#from').empty()
             $.get("{{ route('dompet.index') }}").done(function(res) {
                 for (i = 0; i < res.data.length; i++) {
                     let newOption = new Option(res.data[i].name, res.data[i].id);
                     if (res.data[i].saldo < 1) {
                         $(newOption).prop('disabled', true);
                     }
-                    $('#dompet').append(newOption);
+                    $('#from').append(newOption);
                 }
             }).fail(function(xhr) {
-                console.log(xhr);
+                $('#modalAdd').modal('hide')
+                swal(
+                    'Failed!',
+                    xhr.responseJSON.message,
+                    'error'
+                )
+            })
+        }
+
+        function set_to() {
+            $('#to').empty()
+            $.get("{{ route('dompet.index') }}").done(function(res) {
+                for (i = 0; i < res.data.length; i++) {
+                    let newOption = new Option(res.data[i].name, res.data[i].id);
+                    $('#to').append(newOption);
+                }
+            }).fail(function(xhr) {
                 $('#modalAdd').modal('hide')
                 swal(
                     'Failed!',

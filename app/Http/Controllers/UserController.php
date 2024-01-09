@@ -12,13 +12,10 @@ use Yajra\DataTables\Facades\DataTables;
 class UserController extends Controller
 {
 
-    private $comp;
-
     public function __construct()
     {
         $this->middleware('admin')->except(['profile', 'profileUpdate', 'passwordUpdate']);
         $this->middleware('active')->except(['profile']);
-        $this->comp = Comp::first();
     }
 
     /**
@@ -29,10 +26,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::get();
+            $data = User::query();
             return DataTables::of($data)->toJson();
         }
-        return view('user.index')->with(['comp' => $this->comp, 'title' => 'Data User']);
+        return view('user.index');
     }
 
     /**
@@ -149,7 +146,7 @@ class UserController extends Controller
 
     public function profile()
     {
-        return view('user.profile')->with(['comp' => $this->comp, 'title' => 'User Profile']);
+        return view('user.profile');
     }
 
     public function profileUpdate(Request $request)

@@ -1,4 +1,4 @@
-@extends('layouts.template')
+@extends('layouts.template', ['title' => 'Data Dompet'])
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/dt-global_style.css') }}">

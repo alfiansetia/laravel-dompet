@@ -11,13 +11,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CapitalController extends Controller
 {
-    private $comp;
-
     public function __construct()
     {
         $this->middleware('admin')->only(['destroy']);
         $this->middleware('active');
-        $this->comp = Comp::first();
     }
 
     /**
@@ -28,10 +25,11 @@ class CapitalController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Capital::with('dompet', 'user')->get();
-            return DataTables::of($data)->toJson();
+            $data = Capital::query();
+            $result = $data->with('dompet', 'user');
+            return DataTables::of($result)->toJson();
         }
-        return view('capital.index')->with(['comp' => $this->comp, 'title' => 'Data Capital']);
+        return view('capital.index');
     }
 
     /**

@@ -23,7 +23,7 @@ class CompController extends Controller
      */
     public function index()
     {
-        return view('comp.index')->with(['comp' => $this->comp, 'title' => 'Company Setting']);
+        return view('comp.index');
     }
 
     /**
@@ -60,15 +60,14 @@ class CompController extends Controller
             'logo'      => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'favicon'   => 'required|image|mimes:png,jpg|max:1024',
         ]);
-        $logo = $this->comp->logo;
-        $fav = $this->comp->fav;
+        $logo = $this->comp->getRawOriginal('logo');
+        $fav = $this->comp->getRawOriginal('fav');
+        $destinationPath = public_path('images/company/');
         if ($files = $request->file('logo')) {
-            $destinationPath = 'images/company/';
             $logo = 'logo.' . $files->getClientOriginalExtension();
             $files->move($destinationPath, $logo);
         }
         if ($files = $request->file('favicon')) {
-            $destinationPath = 'images/company/';
             $fav = 'favicon.' . $files->getClientOriginalExtension();
             $files->move($destinationPath, $fav);
         }

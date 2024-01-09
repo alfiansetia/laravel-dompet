@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Comp;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +14,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        view()->composer(
+            [
+                'layouts.template',
+                'comp.index'
+            ],
+            function ($view) {
+                $view->with('comp', Comp::first());
+                $view->with('user', auth()->user());
+            }
+        );
     }
 
     /**

@@ -13,13 +13,10 @@ use Yajra\DataTables\Facades\DataTables;
 class TransaksiController extends Controller
 {
 
-    private $comp;
-
     public function __construct()
     {
         $this->middleware('admin')->only(['destroy']);
         $this->middleware('active');
-        $this->comp = Comp::first();
     }
 
     /**
@@ -30,10 +27,11 @@ class TransaksiController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Transaksi::with('user', 'from', 'to')->get();
-            return DataTables::of($data)->toJson();
+            $data = Transaksi::query();
+            $result = $data->with('user', 'from', 'to');
+            return DataTables::of($result)->toJson();
         }
-        return view('transaksi.index')->with(['comp' => $this->comp, 'title' => 'Data Transaksi']);
+        return view('transaksi.index');
     }
 
     public function create()

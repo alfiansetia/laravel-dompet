@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Capital;
 use App\Models\Comp;
 use App\Models\Dompet;
-use App\Models\Expenditure;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -13,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    private $comp;
     /**
      * Create a new controller instance.
      *
@@ -21,7 +19,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->comp = Comp::first();
+        // 
     }
 
     /**
@@ -31,7 +29,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home')->with(['comp' => $this->comp, 'title' => 'Dashboard']);;
+        return view('home');
     }
 
 

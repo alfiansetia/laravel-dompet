@@ -12,13 +12,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ExpenditureController extends Controller
 {
-    private $comp;
-
     public function __construct()
     {
         $this->middleware('admin')->only(['destroy']);
         $this->middleware('active');
-        $this->comp = Comp::first();
     }
 
     /**
@@ -29,10 +26,11 @@ class ExpenditureController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Expenditure::with('dompet', 'user')->get();
-            return DataTables::of($data)->toJson();
+            $data = Expenditure::query();
+            $result = $data->with('dompet', 'user');
+            return DataTables::of($result)->toJson();
         }
-        return view('expenditure.index')->with(['comp' => $this->comp, 'title' => 'Data Expenditure']);
+        return view('expenditure.index');
     }
 
     /**
