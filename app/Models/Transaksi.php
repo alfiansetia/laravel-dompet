@@ -16,12 +16,6 @@ class Transaksi extends Model
         'revenue'   => 'integer',
     ];
 
-    function getNoAttribute()
-    {
-        $no = str_pad($this->id, 4, '0', STR_PAD_LEFT);
-        return 'TRX-' . $no;
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);

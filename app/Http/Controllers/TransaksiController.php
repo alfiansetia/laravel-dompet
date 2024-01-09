@@ -6,6 +6,7 @@ use App\Models\Comp;
 use App\Models\Dompet;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -58,11 +59,17 @@ class TransaksiController extends Controller
         ],  [
             'amount.lte' => 'Saldo Dompet Asal tidak cukup',
         ]);
+
+        $date = date('Y-m-d');
+        $date_parse = Carbon::parse($date);
+        $count = Transaksi::whereDate('date', $date_parse)->count() ?? 0;
+        $number = 'TRX' . date('ymd', strtotime($date)) . str_pad(($count + 1), 3, 0, STR_PAD_LEFT);
         DB::beginTransaction();
         try {
             $revenue = $request->sell - $request->amount;
             $transaksi = Transaksi::create([
                 'date'      => date('Y-m-d H:i:s'),
+                'number'    => $number,
                 'from_id'   => $request->from,
                 'to_id'     => $request->to,
                 'user_id'   => auth()->user()->id,

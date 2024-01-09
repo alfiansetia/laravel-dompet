@@ -6,6 +6,7 @@ use App\Models\Comp;
 use App\Models\Dompet;
 use App\Models\Expenditure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -49,12 +50,16 @@ class ExpenditureController extends Controller
         ], [
             'amount.lte' => 'Saldo tujuan tidak cukup!'
         ]);
-
+        $date = date('Y-m-d');
+        $date_parse = Carbon::parse($date);
+        $count = Expenditure::whereDate('date', $date_parse)->count() ?? 0;
+        $number = 'EXP' . date('ymd', strtotime($date)) . str_pad(($count + 1), 3, 0, STR_PAD_LEFT);
         DB::beginTransaction();
         try {
             $expenditure = Expenditure::create([
                 'user_id'   => auth()->user()->id,
                 'date'      => date('Y-m-d H:i:s'),
+                'number'    => $number,
                 'dompet_id' => $request->dompet,
                 'amount'    => $request->amount,
                 'status'    => 'success',

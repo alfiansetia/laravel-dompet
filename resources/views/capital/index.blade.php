@@ -189,10 +189,10 @@
             ],
             columns: [{
                 title: "NO",
-                data: 'id',
+                data: 'number',
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
-                        return `<span data-toggle="tooltip" title="${row.status}" class="badge badge-${row.status == 'success' ? 'success' : 'danger'}">${'CAP-' + data}</span>`
+                        return `<span data-toggle="tooltip" title="${row.status}" class="badge badge-${row.status == 'success' ? 'success' : 'danger'}">${data}</span>`
                     } else {
                         return data
                     }
