@@ -17,7 +17,8 @@ class AppServiceProvider extends ServiceProvider
         view()->composer(
             [
                 'layouts.template',
-                'comp.index'
+                'comp.index',
+                'auth.login',
             ],
             function ($view) {
                 $view->with('comp', Comp::first());

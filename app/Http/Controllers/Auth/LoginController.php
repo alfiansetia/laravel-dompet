@@ -38,10 +38,4 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-
-    public function showLoginForm()
-    {
-        $comp = Comp::first();
-        return view('auth.login')->with(['comp' => $comp, 'title' => "Login"]);
-    }
 }

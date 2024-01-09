@@ -8,6 +8,9 @@
 @endpush
 
 @section('content')
+    @php
+        $user = auth()->user();
+    @endphp
     <div class="layout-px-spacing">
         <div class="row layout-top-spacing">
             <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
@@ -20,7 +23,7 @@
                                 <div class="col-md-11 mx-auto">
                                     <div class="work-section">
                                         <div class="row mt-2">
-                                            @if (auth()->user()->status == 'nonactive')
+                                            @if ($user->status == 'nonactive')
                                                 <div class="col-md-12">
                                                     <div class="alert alert-light-danger border-0 mb-4" role="alert">
                                                         <button type="button" class="close" data-dismiss="alert"
@@ -36,7 +39,7 @@
                                                     <label for="name">Name</label>
                                                     <input type="text" name="name" id="name"
                                                         class="form-control mb-4 @error('name') is-invalid @enderror"
-                                                        placeholder="Input Name" value="{{ auth()->user()->name }}" required
+                                                        placeholder="Input Name" value="{{ $user->name }}" required
                                                         autofocus>
                                                     @error('name')
                                                         <span class="invalid-feedback" role="alert">
@@ -52,8 +55,8 @@
                                                             <label for="email">Email</label>
                                                             <input type="email" name="email" id="email"
                                                                 class="form-control mb-4 @error('email') is-invalid @enderror"
-                                                                placeholder="Input Email"
-                                                                value="{{ auth()->user()->email }}" required>
+                                                                placeholder="Input Email" value="{{ $user->email }}"
+                                                                required>
                                                             @error('email')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -66,8 +69,8 @@
                                                             <label for="phone">Phone</label>
                                                             <input type="tel" name="phone" id="phone"
                                                                 class="form-control mb-4 @error('phone') is-invalid @enderror"
-                                                                placeholder="Input Phone"
-                                                                value="{{ auth()->user()->phone }}" required>
+                                                                placeholder="Input Phone" value="{{ $user->phone }}"
+                                                                required>
                                                             @error('phone')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -82,7 +85,7 @@
                                                                 <div class="form-check form-check-inline">
                                                                     <input class="form-check-input" type="radio"
                                                                         name="avatar" id="avatar1" value="boy1.png"
-                                                                        {{ auth()->user()->getRawOriginal('avatar') == 'boy1.png'? 'checked': '' }}>
+                                                                        {{ $user->getRawOriginal('avatar') == 'boy1.png' ? 'checked' : '' }}>
                                                                     <label class="form-check-label" for="avatar1">
                                                                         <img src="{{ asset('images/avatar/boy1.png') }}"
                                                                             class="avatar-image avatar avatar-xl">
@@ -91,7 +94,7 @@
                                                                 <div class="form-check form-check-inline">
                                                                     <input class="form-check-input" type="radio"
                                                                         name="avatar" id="avatar2" value="boy2.png"
-                                                                        {{ auth()->user()->getRawOriginal('avatar') == 'boy2.png'? 'checked': '' }}>
+                                                                        {{ $user->getRawOriginal('avatar') == 'boy2.png' ? 'checked' : '' }}>
                                                                     <label class="form-check-label" for="avatar2">
                                                                         <img src="{{ asset('images/avatar/boy2.png') }}"
                                                                             class="avatar-image avatar avatar-xl">
@@ -100,7 +103,7 @@
                                                                 <div class="form-check form-check-inline">
                                                                     <input class="form-check-input" type="radio"
                                                                         name="avatar" id="avatar3" value="girl1.png"
-                                                                        {{ auth()->user()->getRawOriginal('avatar') == 'girl1.png'? 'checked': '' }}>
+                                                                        {{ $user->getRawOriginal('avatar') == 'girl1.png' ? 'checked' : '' }}>
                                                                     <label class="form-check-label" for="avatar3">
                                                                         <img src="{{ asset('images/avatar/girl1.png') }}"
                                                                             class="avatar-image avatar avatar-xl">
@@ -109,7 +112,7 @@
                                                                 <div class="form-check form-check-inline">
                                                                     <input class="form-check-input" type="radio"
                                                                         name="avatar" id="avatar4" value="girl2.png"
-                                                                        {{ auth()->user()->getRawOriginal('avatar') == 'girl2.png'? 'checked': '' }}>
+                                                                        {{ $user->getRawOriginal('avatar') == 'girl2.png' ? 'checked' : '' }}>
                                                                     <label class="form-check-label" for="avatar4">
                                                                         <img src="{{ asset('images/avatar/girl2.png') }}"
                                                                             class="avatar-image avatar avatar-xl">

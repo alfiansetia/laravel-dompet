@@ -27,8 +27,8 @@
         <ul class="navbar-item flex-row ml-md-auto">
 
             <li class="nav-item dropdown message-dropdown">
-                <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="refresh"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a href="javascript:void(0);" class="nav-link dropdown-toggle" id="refresh" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
                     <i data-feather="refresh-cw"></i>
                 </a>
             </li>
@@ -160,7 +160,7 @@
             <li class="nav-item dropdown user-profile-dropdown">
                 <a href="javascript:void(0);" class="nav-link dropdown-toggle user" id="userProfileDropdown"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <img src="{{ auth()->user()->avatar }}" alt="avatar">
+                    <img src="{{ $user->avatar }}" alt="avatar">
                 </a>
                 <div class="dropdown-menu position-absolute" aria-labelledby="userProfileDropdown">
                     <div class="">
