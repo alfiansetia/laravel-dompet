@@ -48,7 +48,7 @@ class ReportController extends Controller
             $result->where('user_id', $user->id);
         }
         $result->whereDate('date', $date->format('Y-m-d'));
-        $data = $result->get();
+        $data = $result->where('status', 'success')->get();
         return response()->json(['status' => true, 'data' => $data, 'message' => '']);
     }
 }
