@@ -68,6 +68,16 @@
             </li>
 
             <li class="menu">
+                <a href="{{ route('report.index') }}" data-active="{{ $title == 'Report' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'Report' ? 'true' : 'false' }}" class="dropdown-toggle">
+                    <div class="">
+                        <i data-feather="book"></i>
+                        <span>Report</span>
+                    </div>
+                </a>
+            </li>
+
+            <li class="menu">
                 <a href="#settings_menu" data-toggle="collapse"
                     data-active="{{ $title == 'User Profile' || $title == 'Company Setting' ? 'true' : 'false' }}"
                     aria-expanded="{{ $title == 'User Profile' || $title == 'Company Setting' ? 'true' : 'false' }}"

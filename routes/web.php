@@ -5,6 +5,7 @@ use App\Http\Controllers\CompController;
 use App\Http\Controllers\DompetController;
 use App\Http\Controllers\ExpenditureController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +44,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('user/password', [UserController::class, 'passwordUpdate'])->name('user.password.update');
     Route::resource('user', UserController::class)->only(['index', 'store', 'show', 'update']);
     Route::delete('user', [UserController::class, 'destroy'])->name('user.destroy');
+
+    Route::get('report', [ReportController::class, 'index'])->name('report.index');
+    Route::get('report/get-data', [ReportController::class, 'getData'])->name('report.data');
+    Route::get('report/get-date', [ReportController::class, 'getDate'])->name('report.date');
 
     Route::resource('dompet', DompetController::class)->only(['index', 'store', 'show', 'update']);
     Route::delete('dompet', [DompetController::class, 'destroy'])->name('dompet.destroy');
