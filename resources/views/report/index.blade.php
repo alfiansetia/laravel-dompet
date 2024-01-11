@@ -3,11 +3,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/datatables.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/dt-global_style.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/forms/theme-checkbox-radio.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('plugins/table/datatables-buttons/css/buttons.bootstrap4.min.css') }}" />
-
-    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/flatpickr/flatpickr.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/flatpickr/custom-flatpickr.css') }}">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 @endpush
@@ -48,7 +43,7 @@
     </div>
 
     <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="detailModalLabel">List Transaction on <span id="detail_date"></span></h5>
@@ -57,17 +52,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <table id="detail_table" class="table dt-table-hover" style="width:100%;cursor: pointer;">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Number</th>
-                                <th>Revenue</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table id="detail_table" class="table dt-table-hover" style="width:100%;cursor: pointer;">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Number</th>
+                                    <th>Revenue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -79,8 +76,6 @@
 
 @push('js')
     <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
-
-    <script src="{{ asset('plugins/flatpickr/flatpickr.js') }}"></script>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
@@ -119,8 +114,6 @@
                 ajax: {
                     url: "{{ route('report.data') }}",
                     data: function(dt) {
-                        // dt.from = '2024-01-01'
-                        // dt.to = '2024-01-09'
                         dt.from = $('#range').data('daterangepicker').startDate.format('YYYY-MM-DD');
                         dt.to = $('#range').data('daterangepicker').endDate.format('YYYY-MM-DD');
                     }
@@ -182,17 +175,40 @@
                 let date = data.transaction_date
                 $.get("{{ route('report.date') }}?date=" + date).done(function(res) {
                     $('#detail_date').html(date)
-                    $('#detail_table').find('tbody').empty();
-                    let row = ''
-                    res.data.forEach(element => {
-                        row +=
-                            `<tr><td>${element.date}</td><td>${element.number}</td><<td>${hrg(element.revenue)}</td></tr>`
-                    });
-                    $('#detail_table').find('tbody').append(row);
+                    detail_table.clear().draw()
+                    detail_table.rows.add(res.data).draw()
                     $('#detailModal').modal('show')
                 })
             });
 
+            var detail_table = $('#detail_table').DataTable({
+                rowId: 'id',
+                lengthChange: false,
+                searching: false,
+                info: false,
+                paging: false,
+                columnDefs: [],
+                order: [
+                    [0, 'desc']
+                ],
+                columns: [{
+                    title: "Date",
+                    data: 'date',
+                }, {
+                    title: "Number",
+                    data: 'number',
+                }, {
+                    title: "Revenue",
+                    data: 'revenue',
+                    render: function(data, type, row, meta) {
+                        if (type == 'display') {
+                            return hrg(data)
+                        } else {
+                            return data
+                        }
+                    }
+                }, ]
+            });
         })
     </script>
 @endpush
