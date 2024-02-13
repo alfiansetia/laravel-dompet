@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 
 class BackupDatabase extends Command
@@ -34,8 +35,14 @@ class BackupDatabase extends Command
         if (!file_exists($full_path)) {
             File::makeDirectory($full_path, 0777, true);
         }
+        $defaultConnection = Config::get('database.default');
+        $defaultConfig = Config::get('database.connections.' . $defaultConnection);
+        $host = $defaultConfig['host'];
+        $database = $defaultConfig['database'];
+        $username = $defaultConfig['username'];
+        $password = $defaultConfig['password'];
         $filename = "backup-" . date('YmdHis') . ".sql";
-        $command = "mysqldump --user=" . env('DB_USERNAME') . " --password=" . env('DB_PASSWORD') . " --host=" . env('DB_HOST') . " " . env('DB_DATABASE') . " > " . $full_path . "/" . $filename;
+        $command = "mysqldump --user=" . $username . " --password=" . $password . " --host=" . $host . " " . $database . " > " . $full_path . "/" . $filename;
         $returnVar = NULL;
         $output  = NULL;
         exec($command, $output, $returnVar);
