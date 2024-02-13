@@ -33,7 +33,7 @@ class BackupDatabase extends Command
         $path = 'app/backup/';
         $full_path = $root . '/' . $path;
         if (!file_exists($full_path)) {
-            File::makeDirectory($full_path, 0777, true);
+            File::makeDirectory($full_path);
         }
         $defaultConnection = Config::get('database.default');
         $defaultConfig = Config::get('database.connections.' . $defaultConnection);
