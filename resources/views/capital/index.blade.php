@@ -516,7 +516,7 @@
                         }
                         $('.title-edit').remove()
                         $('#titleEdit').append(
-                            `<span class="badge title-edit ml-2 badge-${result.data.status == 'success' ? 'success' : 'danger'}">CAP-${result.data.id}`
+                            `<span class="badge title-edit ml-2 badge-${result.data.status == 'success' ? 'success' : 'danger'}">CAP-${result.data.number}`
                         )
                         if (show) {
                             $('#modalEdit').modal('show');
