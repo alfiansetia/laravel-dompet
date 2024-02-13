@@ -42,7 +42,7 @@ class BackupDatabase extends Command
         $username = $defaultConfig['username'];
         $password = $defaultConfig['password'];
         $filename = "backup-" . date('YmdHis') . ".sql";
-        $command = "mysqldump --user=" . $username . " --password=" . $password . " --host=" . $host . " " . $database . " > " . $full_path . "/" . $filename . ";";
+        $command = 'mysqldump --user="' . $username . '" --password="' . $password . '" --host="' . $host . '" "' . $database . '" > "' . $full_path . '/' . $filename . '";';
         $returnVar = NULL;
         $output  = NULL;
         exec($command, $output, $returnVar);
