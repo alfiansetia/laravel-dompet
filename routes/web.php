@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CapitalController;
 use App\Http\Controllers\CompController;
+use App\Http\Controllers\DatabaseBackupController;
 use App\Http\Controllers\DompetController;
 use App\Http\Controllers\ExpenditureController;
 use App\Http\Controllers\HomeController;
@@ -59,4 +60,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('expenditure', ExpenditureController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
 
     Route::resource('comp', CompController::class)->only(['index', 'store']);
+
+    Route::get('database/detail/{file}', [DatabaseBackupController::class, 'download'])->name('database.download');
+    Route::get('database', [DatabaseBackupController::class, 'index'])->name('database.index');
+    Route::post('database', [DatabaseBackupController::class, 'store'])->name('database.store');
+    Route::delete('database/{file}', [DatabaseBackupController::class, 'destroy'])->name('database.destroy');
 });

@@ -79,8 +79,8 @@
 
             <li class="menu">
                 <a href="#settings_menu" data-toggle="collapse"
-                    data-active="{{ $title == 'User Profile' || $title == 'Company Setting' ? 'true' : 'false' }}"
-                    aria-expanded="{{ $title == 'User Profile' || $title == 'Company Setting' ? 'true' : 'false' }}"
+                    data-active="{{ $title == 'User Profile' || $title == 'Company Setting' || $title == 'Database Backup' ? 'true' : 'false' }}"
+                    aria-expanded="{{ $title == 'User Profile' || $title == 'Company Setting' || $title == 'Database Backup' ? 'true' : 'false' }}"
                     class="dropdown-toggle">
                     <div class="">
                         <i data-feather="sliders"></i>
@@ -90,13 +90,16 @@
                         <i data-feather="chevron-right"></i>
                     </div>
                 </a>
-                <ul class="collapse submenu list-unstyled {{ $title == 'User Profile' || $title == 'Company Setting' ? 'show' : '' }}"
+                <ul class="collapse submenu list-unstyled {{ $title == 'User Profile' || $title == 'Company Setting' || $title == 'Database Backup' ? 'show' : '' }}"
                     id="settings_menu" data-parent="#accordionExample">
                     <li class="{{ $title == 'User Profile' ? 'active' : '' }}">
                         <a href="{{ route('user.profile') }}">Profile</a>
                     </li>
                     <li class="{{ $title == 'Company Setting' ? 'active' : '' }}">
                         <a href="{{ route('comp.index') }}">Company</a>
+                    </li>
+                    <li class="{{ $title == 'Database Backup' ? 'active' : '' }}">
+                        <a href="{{ route('database.index') }}">Database Backup</a>
                     </li>
                 </ul>
             </li>
