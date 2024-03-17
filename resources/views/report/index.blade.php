@@ -5,6 +5,12 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/forms/theme-checkbox-radio.css') }}">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+        integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css"
+        rel="stylesheet">
 @endpush
 @section('content')
     <div class="layout-px-spacing">
@@ -14,11 +20,22 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="form-group row">
-                                <label for="staticEmail" class="col-sm-2 col-form-label">Range Date</label>
+                                <label for="range" class="col-sm-2 col-form-label">Range Date</label>
                                 <div class="col-sm-10">
                                     <input type="text" id="range" class="form-control" readonly>
                                 </div>
                             </div>
+                            @if ($user->role == 'admin')
+                                <div class="form-group row">
+                                    <label for="user" class="col-sm-2 col-form-label">User</label>
+                                    <div class="col-sm-10">
+                                        <select name="user[]" id="user" class="form-control" style="width: 100%"
+                                            multiple>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-warning" id="reset">Reset</button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -79,8 +96,44 @@
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"
+        integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
         $(document).ready(function() {
+            var perpage = 20;
+
+            $("#user").select2({
+                theme: "bootstrap4",
+                multiple: true,
+                ajax: {
+                    delay: 1000,
+                    url: "{{ route('user.paginate') }}",
+                    data: function(params) {
+                        return {
+                            name: params.term || '',
+                            page: params.page || 1,
+                            limit: perpage,
+                        };
+                    },
+                    processResults: function(data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: $.map(data.data, function(item) {
+                                return {
+                                    text: item.name,
+                                    id: item.id,
+                                }
+                            }),
+                            pagination: {
+                                more: (params.page * perpage) < data.total
+                            }
+                        };
+                    },
+                }
+            });
 
             $('#range').daterangepicker({
                 locale: {
@@ -108,6 +161,14 @@
                 table.ajax.reload()
             })
 
+            $('#user').change(function() {
+                table.ajax.reload()
+            })
+
+            $('#reset').click(function() {
+                $('#user').empty().trigger('change')
+            })
+
             var table = $('#table').DataTable({
                 processing: true,
                 serverSide: false,
@@ -116,6 +177,7 @@
                     data: function(dt) {
                         dt.from = $('#range').data('daterangepicker').startDate.format('YYYY-MM-DD');
                         dt.to = $('#range').data('daterangepicker').endDate.format('YYYY-MM-DD');
+                        dt.user = $('#user').val()
                     }
                 },
                 dom: "<'table-responsive'tr>" +
@@ -173,12 +235,14 @@
             $('#table tbody').on('click', 'tr td', function() {
                 var data = table.row(this).data();
                 let date = data.transaction_date
-                $.get("{{ route('report.date') }}?date=" + date).done(function(res) {
-                    $('#detail_date').html(date)
-                    detail_table.clear().draw()
-                    detail_table.rows.add(res.data).draw()
-                    $('#detailModal').modal('show')
-                })
+                let user = $('#user').val() || [];
+                let queryString = `date=${date}&user[]=${user.join('&user[]=')}`;
+                $.get("{{ route('report.date') }}?" + queryString).done(function(res) {
+                    $('#detail_date').html(date);
+                    detail_table.clear().draw();
+                    detail_table.rows.add(res.data).draw();
+                    $('#detailModal').modal('show');
+                });
             });
 
             var detail_table = $('#detail_table').DataTable({

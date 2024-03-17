@@ -30,6 +30,16 @@
     @stack('css')
     <!-- END PAGE LEVEL STYLES -->
 
+    <style>
+        .select2-close-mask {
+            z-index: 2099;
+        }
+
+        .select2-dropdown {
+            z-index: 3051;
+        }
+    </style>
+
 </head>
 
 <body>

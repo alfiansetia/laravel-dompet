@@ -5,6 +5,12 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/forms/theme-checkbox-radio.css') }}">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('plugins/table/datatables-buttons/css/buttons.bootstrap4.min.css') }}" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+        integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css"
+        rel="stylesheet">
 @endpush
 @section('content')
     <div class="layout-px-spacing">
@@ -31,101 +37,7 @@
             </div>
         </div>
     </div>
-
-    <div class="modal animated fade fadeInDown" id="modalAdd" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-plus mr-1" data-toggle="tooltip"
-                            title="Add Data"></i>Add Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" data-toggle="tooltip" title="Close">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="form" class="form-vertical" action="" method="POST" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label class="control-label" for="dompet"></i>Dompet :</label>
-                            <select name="dompet" id="dompet" class="form-control" style="width: 100%;" required>
-                            </select>
-                            <span id="err_dompet" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="amount">Amount :</label>
-                            <input type="text" name="amount" class="form-control maxlength mask-angka" id="amount"
-                                placeholder="Please Enter Amount" min="1" value="0" required>
-                            <span id="err_amount" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="desc">Desc :</label>
-                            <textarea name="desc" id="desc" class="form-control maxlength" minlength="0" maxlength="100"></textarea>
-                            <span id="err_desc" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"
-                            data-toggle="tooltip" title="Close"></i>Close</button>
-                    <button type="reset" id="reset" class="btn btn-warning"><i class="fas fa-undo mr-1"
-                            data-toggle="tooltip" title="Reset"></i>Reset</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1" data-toggle="tooltip"
-                            title="Save"></i>Save</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal animated fade fadeInDown" id="modalEdit" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="titleEdit"><i class="fas fa-edit mr-1" data-toggle="tooltip"
-                            title="Edit Data"></i>Edit Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="tooltip"
-                        title="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="formEdit" class="fofrm-vertical" action="" method="POST"
-                        enctype="multipart/form-data">
-                        {{ method_field('PUT') }}
-                        <div class="form-group">
-                            <label class="control-label" for="edit_user">User :</label>
-                            <input type="text" class="form-control" id="edit_user" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="edit_date">Date :</label>
-                            <input type="text" class="form-control" id="edit_date" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="edit_dompet">Dompet :</label>
-                            <input type="text" class="form-control" id="edit_dompet" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="edit_amount">Amount :</label>
-                            <input type="text" class="form-control" id="edit_amount" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="edit_desc">Desc :</label>
-                            <textarea name="desc" id="edit_desc" class="form-control maxlength" minlength="0" maxlength="100"></textarea>
-                            <span id="err_edit_desc" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"
-                            data-toggle="tooltip" title="Close"></i>Close</button>
-                    <button type="button" id="edit_reset" class="btn btn-danger"><i class="fas fa-undo mr-1"
-                            data-toggle="tooltip" title="Set Cancel"></i>Set Cancel</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1"
-                            data-toggle="tooltip" title="Save"></i>Save</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    @include('capital.modal')
 @endsection
 @push('js')
     <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
@@ -141,7 +53,41 @@
 
     <script src="{{ asset('plugins/input-mask/jquery.inputmask.bundle.min.js') }}"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"
+        integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
+        var perpage = 20;
+        $("#dompet").select2({
+            theme: "bootstrap4",
+            ajax: {
+                delay: 1000,
+                url: "{{ route('dompet.paginate') }}",
+                data: function(params) {
+                    return {
+                        name: params.term || '',
+                        page: params.page || 1,
+                        limit: perpage,
+                    };
+                },
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.id,
+                            }
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
+                    };
+                },
+            }
+        });
+
         $('.maxlength').maxlength({
             placement: "top",
             alwaysShow: true
@@ -156,9 +102,9 @@
             removeMaskOnSubmit: true,
         });
 
-        $('#modalAdd').on('shown.bs.modal', function() {
-            set_dompet()
-        });
+        // $('#modalAdd').on('shown.bs.modal', function() {
+        //     set_dompet()
+        // });
 
         var table = $('#table').DataTable({
             processing: true,
@@ -491,6 +437,16 @@
                     });
                 }
             })
+        })
+
+        $('#reset').click(function() {
+            $('#form .error.invalid-feedback').each(function(i) {
+                $(this).hide();
+            });
+            $('#form input.is-invalid').each(function(i) {
+                $(this).removeClass('is-invalid');
+            });
+            $("#dompet").val('').change()
         })
 
         function edit(id, show = false) {

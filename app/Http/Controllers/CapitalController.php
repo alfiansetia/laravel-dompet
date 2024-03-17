@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Capital;
 use App\Models\Comp;
+use App\Models\Dompet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +26,11 @@ class CapitalController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $user = auth()->user();
             $data = Capital::query();
+            if ($user->role == 'user') {
+                $data->where('user_id', $user->id);
+            }
             $result = $data->with('dompet', 'user');
             return DataTables::of($result)->toJson();
         }
@@ -45,6 +50,13 @@ class CapitalController extends Controller
             'amount' => 'required|integer|gt:0',
             'desc'   => 'nullable|max:100',
         ]);
+        $user = auth()->user();
+        if ($user->role == 'user') {
+            $dompet = Dompet::find($request->dompet);
+            if ($dompet->user_id != $user->id) {
+                return $this->handle_unauthorize();
+            }
+        }
         $date = date('Y-m-d');
         $date_parse = Carbon::parse($date);
         $count = Capital::whereDate('date', $date_parse)->count() ?? 0;

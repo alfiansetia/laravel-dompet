@@ -26,7 +26,11 @@ class ExpenditureController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $user = auth()->user();
             $data = Expenditure::query();
+            if ($user->role == 'user') {
+                $data->where('user_id', $user->id);
+            }
             $result = $data->with('dompet', 'user');
             return DataTables::of($result)->toJson();
         }
@@ -48,6 +52,13 @@ class ExpenditureController extends Controller
         ], [
             'amount.lte' => 'Saldo tujuan tidak cukup!'
         ]);
+        $user = auth()->user();
+        if ($user->role == 'user') {
+            $dompet = Dompet::find($request->dompet);
+            if ($dompet->user_id != $user->id) {
+                return $this->handle_unauthorize();
+            }
+        }
         $date = date('Y-m-d');
         $date_parse = Carbon::parse($date);
         $count = Expenditure::whereDate('date', $date_parse)->count() ?? 0;

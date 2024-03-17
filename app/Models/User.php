@@ -54,4 +54,9 @@ class User extends Authenticatable
             return url('/images/avatar/boy1.png');
         }
     }
+
+    public function dompets()
+    {
+        return $this->hasMany(Dompet::class);
+    }
 }

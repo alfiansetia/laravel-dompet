@@ -5,6 +5,12 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/forms/theme-checkbox-radio.css') }}">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('plugins/table/datatables-buttons/css/buttons.bootstrap4.min.css') }}" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+        integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css"
+        rel="stylesheet">
 @endpush
 @section('content')
     <div class="layout-px-spacing">
@@ -21,6 +27,7 @@
                                     <th>Acc</th>
                                     <th>Number</th>
                                     <th>Saldo</th>
+                                    <th>User</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -32,114 +39,7 @@
         </div>
     </div>
 
-    <div class="modal animated fade fadeInDown" id="modalAdd" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-plus mr-1" data-toggle="tooltip"
-                            title="Add Data"></i>Add Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" data-toggle="tooltip" title="Close">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="form" class="form-vertical" action="" method="POST" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label class="control-label" for="name">Name :</label>
-                            <input type="text" name="name" class="form-control maxlength" id="name"
-                                placeholder="Please Enter Name" minlength="3" maxlength="25" required>
-                            <span id="err_name" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="type"></i>Type :</label>
-                            <select name="type" id="type" class="form-control" style="width: 100%;" required>
-                                <option value="cash">Cash</option>
-                                <option value="ewallet">Ewallet</option>
-                            </select>
-                            <span id="err_type" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="acc_name">Account Name :</label>
-                            <input type="text" name="acc_name" class="form-control maxlength" id="acc_name"
-                                placeholder="Please Enter Account Name" minlength="3" maxlength="25" required>
-                            <span id="err_acc_name" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="acc_number">Account Number :</label>
-                            <input type="text" name="acc_number" class="form-control maxlength" id="acc_number"
-                                placeholder="Please Enter Account Name" minlength="3" maxlength="25" required>
-                            <span id="err_acc_number" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"
-                            data-toggle="tooltip" title="Close"></i>Close</button>
-                    <button type="reset" id="reset" class="btn btn-warning"><i class="fas fa-undo mr-1"
-                            data-toggle="tooltip" title="Reset"></i>Reset</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1"
-                            data-toggle="tooltip" title="Save"></i>Save</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal animated fade fadeInDown" id="modalEdit" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="titleEdit"><i class="fas fa-edit mr-1" data-toggle="tooltip"
-                            title="Edit Data"></i>Edit Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="tooltip"
-                        title="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="formEdit" class="fofrm-vertical" action="" method="POST"
-                        enctype="multipart/form-data">
-                        {{ method_field('PUT') }}
-                        <div class="form-group">
-                            <label class="control-label" for="edit_name">Name :</label>
-                            <input type="text" name="name" class="form-control maxlength" id="edit_name"
-                                placeholder="Please Enter Name" minlength="3" maxlength="25" required>
-                            <span id="err_edit_name" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="edit_type"></i>Type :</label>
-                            <select name="type" id="edit_type" class="form-control" style="width: 100%;" required>
-                                <option value="cash">Cash</option>
-                                <option value="ewallet">Ewallet</option>
-                            </select>
-                            <span id="err_edit_type" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="edit_acc_name">Account Name :</label>
-                            <input type="text" name="acc_name" class="form-control maxlength" id="edit_acc_name"
-                                placeholder="Please Enter Account Name" minlength="3" maxlength="25" required>
-                            <span id="err_edit_acc_name" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="edit_acc_number">Account Number :</label>
-                            <input type="text" name="acc_number" class="form-control maxlength" id="edit_acc_number"
-                                placeholder="Please Enter Account Name" minlength="3" maxlength="25" required>
-                            <span id="err_edit_acc_number" class="error invalid-feedback" style="display: hide;"></span>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times mr-1"
-                            data-toggle="tooltip" title="Close"></i>Close</button>
-                    <button type="button" id="edit_reset" class="btn btn-warning"><i class="fas fa-undo mr-1"
-                            data-toggle="tooltip" title="Reset"></i>Reset</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane mr-1"
-                            data-toggle="tooltip" title="Save"></i>Save</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    @include('dompet.modal')
 @endsection
 @push('js')
     <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
@@ -154,7 +54,45 @@
     <script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"
+        integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
+        $("#type, #edit_type").select2({
+            theme: "bootstrap4",
+        });
+        var perpage = 20;
+        $("#user, #edit_user").select2({
+            theme: "bootstrap4",
+            ajax: {
+                delay: 1000,
+                url: "{{ route('user.paginate') }}",
+                data: function(params) {
+                    return {
+                        name: params.term || '',
+                        page: params.page || 1,
+                        limit: perpage,
+                    };
+                },
+                processResults: function(data, params) {
+                    params.page = params.page || 1;
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.name,
+                                id: item.id,
+                            }
+                        }),
+                        pagination: {
+                            more: (params.page * perpage) < data.total
+                        }
+                    };
+                },
+            }
+        });
+
         var table = $('#table').DataTable({
             processing: true,
             serverSide: true,
@@ -214,6 +152,20 @@
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
                         return hrg(data)
+                    } else {
+                        return data
+                    }
+                }
+            }, {
+                title: 'User',
+                data: 'user_id',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        if (data == null) {
+                            return ''
+                        } else {
+                            return row.user.name
+                        }
                     } else {
                         return data
                     }
@@ -374,6 +326,8 @@
             $('#form input.is-invalid').each(function(i) {
                 $(this).removeClass('is-invalid');
             });
+            $('#user').val('').change()
+            $('#type').val('cash').change()
         })
 
         $('#form').submit(function(event) {
@@ -467,6 +421,13 @@
                         $('#edit_type').val(result.data.type).change();
                         $('#edit_acc_name').val(result.data.acc_name);
                         $('#edit_acc_number').val(result.data.acc_number);
+                        if (result.data.user_id == null) {
+                            $('#edit_user').val('').change();
+                        } else {
+                            let newOption = new Option(result.data.user.name, result.data.user_id, true,
+                                true);
+                            $('#edit_user').append(newOption).trigger('change');
+                        }
                         if (show) {
                             $('#modalEdit').modal('show');
                         }

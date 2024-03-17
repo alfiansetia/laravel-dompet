@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comp;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +15,8 @@ class UserController extends Controller
     {
         $this->middleware('admin')->except(['profile', 'profileUpdate', 'passwordUpdate']);
         $this->middleware('active')->except(['profile']);
+        $this->model = User::class;
+        $this->filter = ['name'];
     }
 
     /**
@@ -43,10 +44,11 @@ class UserController extends Controller
         $this->validate($request, [
             'name'      => 'required|max:50|min:3',
             'email'     => 'required|email|unique:users,email',
-            'phone'     => 'required|numeric|min:10|max:15',
+            'phone'     => 'required|numeric|digits_between:10,15',
             'password'  => 'required|min:5',
             'role'      => 'required|in:admin,user',
             'status'    => 'required|in:active,nonactive',
+
         ]);
         $user = User::create([
             'name'      => $request->name,
@@ -100,19 +102,18 @@ class UserController extends Controller
             'role'      => 'required|in:admin,user',
             'status'    => 'required|in:active,nonactive',
         ]);
-
-        if ($request->filled('password')) {
-            $user->update([
-                'password' => Hash::make($request->password),
-            ]);
-        }
-        $user = $user->update([
+        $param = [
             'name'      => $request->name,
             'email'     => $request->email,
             'phone'     => $request->phone,
             'role'      => $request->role,
             'status'    => $request->status,
-        ]);
+        ];
+
+        if ($request->filled('password')) {
+            $param['password'] = Hash::make($request->password);
+        }
+        $user->update($param);
         if ($user) {
             return response()->json(['status' => true, 'message' => 'Success update data!', 'data' => '']);
         } else {

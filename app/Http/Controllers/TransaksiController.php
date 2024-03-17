@@ -17,7 +17,9 @@ class TransaksiController extends Controller
     {
         $this->middleware('admin')->only(['destroy']);
         $this->middleware('active');
+        $this->model = Transaksi::class;
     }
+
 
     /**
      * Display a listing of the resource.
@@ -27,7 +29,11 @@ class TransaksiController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $user = auth()->user();
             $data = Transaksi::query();
+            if ($user->role == 'user') {
+                $data->where('user_id', $user->id);
+            }
             $result = $data->with('user', 'from', 'to');
             return DataTables::of($result)->toJson();
         }
@@ -36,7 +42,7 @@ class TransaksiController extends Controller
 
     public function create()
     {
-        return view('transaksi.add')->with(['comp' => $this->comp, 'title' => 'Add Transaksi']);
+        // return view('transaksi.add')->with(['comp' => $this->comp, 'title' => 'Add Transaksi']);
     }
 
     /**
@@ -57,6 +63,15 @@ class TransaksiController extends Controller
         ],  [
             'amount.lte' => 'Saldo Dompet Asal tidak cukup',
         ]);
+
+        $user = auth()->user();
+        if ($user->role == 'user') {
+            $from = Dompet::find($request->from);
+            $to = Dompet::find($request->to);
+            if ($from->user_id != $user->id && $to->user_id != $user->id) {
+                return $this->handle_unauthorize();
+            }
+        }
 
         $date = date('Y-m-d');
         $date_parse = Carbon::parse($date);

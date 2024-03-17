@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comp;
 use App\Models\Dompet;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -11,8 +10,22 @@ class DompetController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('admin')->except(['index', 'show']);
+        $this->middleware('admin')->except(['index', 'show', 'paginate']);
         $this->middleware('active');
+    }
+
+    public function paginate(Request $request)
+    {
+        $limit = 10;
+        if ($request->filled('limit') && is_numeric($request->limit) && $request->limit > 10) {
+            $limit = $request->limit;
+        }
+        $user = auth()->user();
+        $data = Dompet::query();
+        if ($user->role != 'admin') {
+            $data->where('user_id', $user->id);
+        }
+        return response()->json($data->paginate($limit));
     }
 
     /**
@@ -23,8 +36,12 @@ class DompetController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $user = auth()->user();
             $data = Dompet::query();
-            return DataTables::of($data)->toJson();
+            if ($user->role != 'admin') {
+                $data->where('user_id', $user->id);
+            }
+            return DataTables::of($data->with('user'))->toJson();
         }
         return view('dompet.index');
     }
@@ -42,6 +59,7 @@ class DompetController extends Controller
             'type'          => 'required|in:cash,ewallet',
             'acc_name'      => 'required|max:50|min:3',
             'acc_number'    => 'required|max:50|min:3',
+            'user'          => 'required|exists:users,id',
         ]);
 
         $dompet = Dompet::create([
@@ -49,6 +67,7 @@ class DompetController extends Controller
             'type'          => $request->type,
             'acc_name'      => $request->acc_name,
             'acc_number'    => $request->acc_number,
+            'user_id'       => $request->user,
         ]);
         if ($dompet) {
             return response()->json(['status' => true, 'message' => 'Success insert data!', 'data' => '']);
@@ -69,7 +88,7 @@ class DompetController extends Controller
             abort(404);
         }
         if ($request->ajax()) {
-            return response()->json(['status' => true, 'message' => '', 'data' => $dompet]);
+            return response()->json(['status' => true, 'message' => '', 'data' => $dompet->load('user')]);
         }
         abort(404);
     }
@@ -92,6 +111,8 @@ class DompetController extends Controller
             'type'          => 'required|in:cash,ewallet',
             'acc_name'      => 'required|max:50|min:3',
             'acc_number'    => 'required|max:50|min:3',
+            'user'          => 'required|exists:users,id',
+
         ]);
 
         $dompet = $dompet->update([
@@ -99,6 +120,7 @@ class DompetController extends Controller
             'type'          => $request->type,
             'acc_name'      => $request->acc_name,
             'acc_number'    => $request->acc_number,
+            'user_id'       => $request->user,
         ]);
 
         if ($dompet) {
@@ -116,7 +138,6 @@ class DompetController extends Controller
      */
     public function destroy(Request $request)
     {
-
         $this->validate($request, [
             'id'    => 'required|array|min:1',
             'id.*'  => 'integer|exists:dompets,id',

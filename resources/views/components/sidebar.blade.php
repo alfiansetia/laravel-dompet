@@ -28,7 +28,7 @@
                     aria-expanded="{{ $title == 'Data Capital' ? 'true' : 'false' }}" class="dropdown-toggle">
                     <div class="">
                         <i data-feather="download"></i>
-                        <span>Pemasukan</span>
+                        <span>Modal</span>
                     </div>
                 </a>
             </li>
