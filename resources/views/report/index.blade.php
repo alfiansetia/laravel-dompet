@@ -11,6 +11,12 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css"
         rel="stylesheet">
+
+    <style>
+        .red {
+            background-color: #f87d7d !important;
+        }
+    </style>
 @endpush
 @section('content')
     <div class="layout-px-spacing">
@@ -59,36 +65,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="detailModalLabel">List Transaction on <span id="detail_date"></span></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table id="detail_table" class="table dt-table-hover" style="width:100%;cursor: pointer;">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Number</th>
-                                    <th>Revenue</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('report.modal')
 @endsection
 
 @push('js')
@@ -238,7 +215,7 @@
                 let user = $('#user').val() || [];
                 let queryString = `date=${date}&user[]=${user.join('&user[]=')}`;
                 $.get("{{ route('report.date') }}?" + queryString).done(function(res) {
-                    $('#detail_date').html(date);
+                    $('#detail_date').html(`<b>${date}</b>`);
                     detail_table.clear().draw();
                     detail_table.rows.add(res.data).draw();
                     $('#detailModal').modal('show');
@@ -255,12 +232,27 @@
                 order: [
                     [0, 'desc']
                 ],
+                createdRow: function(row, data, dataIndex) {
+                    if (data.status != "success") {
+                        $(row).addClass('red');
+                    }
+                },
                 columns: [{
                     title: "Date",
                     data: 'date',
                 }, {
                     title: "Number",
                     data: 'number',
+                }, {
+                    title: "Detail",
+                    data: 'from_id',
+                    render: function(data, type, row, meta) {
+                        if (type == 'display') {
+                            return `From : <b>${row.from.name}</b>, To : <b>${row.to.name}</b> <br> Amount: <b>${hrg(row.amount)}</b> Cost: <b>${hrg(row.cost)}</b>`
+                        } else {
+                            return data
+                        }
+                    }
                 }, {
                     title: "Revenue",
                     data: 'revenue',
