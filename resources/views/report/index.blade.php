@@ -210,6 +210,7 @@
             });
 
             $('#table tbody').on('click', 'tr td', function() {
+                block();
                 var data = table.row(this).data();
                 let date = data.transaction_date
                 let user = $('#user').val() || [];
@@ -219,6 +220,9 @@
                     detail_table.clear().draw();
                     detail_table.rows.add(res.data).draw();
                     $('#detailModal').modal('show');
+                    unblock();
+                }).fail(function(xhr) {
+                    unblock();
                 });
             });
 
