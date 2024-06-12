@@ -60,7 +60,13 @@
         integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script src="{{ asset('assets/js/func.js') }}"></script>
     <script>
+        var url_index = "{{ route('api.transaksi.index') }}";
+        var url_id;
+        var id;
+        var perpage = 20;
+
         $(document).ready(function() {
             $('.maxlength').maxlength({
                 placement: "top",
@@ -101,12 +107,11 @@
             }
         }
 
-        var perpage = 20;
         $("#from, #to").select2({
             theme: "bootstrap4",
             ajax: {
                 delay: 1000,
-                url: "{{ route('dompet.paginate') }}",
+                url: "{{ route('api.dompet.paginate') }}",
                 data: function(params) {
                     return {
                         name: params.term || '',
@@ -131,16 +136,10 @@
             }
         });
 
-        // $('#modalAdd').on('shown.bs.modal', function() {
-        //     set_from()
-        //     set_to()
-        // });
-
         var table = $('#table').DataTable({
             processing: true,
             serverSide: true,
-            rowId: 'id',
-            ajax: "{{ route('transaksi.index') }}",
+            ajax: url_index,
             dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
                 "<'table-responsive'tr>" +
                 "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
@@ -160,11 +159,7 @@
             pageLength: 10,
             lengthChange: false,
             columnDefs: [],
-            order: [
-                [0, 'desc']
-            ],
             columns: [{
-                title: "NO",
                 data: 'number',
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
@@ -174,10 +169,8 @@
                     }
                 }
             }, {
-                title: "Date",
                 data: 'date',
             }, {
-                title: "User",
                 data: 'user.name',
                 visible: false,
                 render: function(data, type, row, meta) {
@@ -188,13 +181,10 @@
                     }
                 }
             }, {
-                title: "From",
                 data: 'from.name',
             }, {
-                title: "To",
                 data: 'to.name',
             }, {
-                title: "Amount",
                 data: 'amount',
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
@@ -204,7 +194,6 @@
                     }
                 }
             }, {
-                title: 'Cost',
                 data: 'cost',
                 visible: false,
                 render: function(data, type, row, meta) {
@@ -215,7 +204,6 @@
                     }
                 }
             }, {
-                title: 'Revenue',
                 data: 'revenue',
                 visible: false,
                 render: function(data, type, row, meta) {
@@ -226,7 +214,6 @@
                     }
                 }
             }, {
-                title: 'Desc',
                 data: 'desc',
                 visible: false,
             }],
@@ -268,10 +255,12 @@
 
         multiCheck(table);
 
-        var id;
-
         $('#table tbody').on('click', 'tr td', function() {
+            $('#formEdit')[0].reset()
+            clear_validate('formEdit')
             id = table.row(this).id()
+            url_id = url_index + "/" + id
+            $('#formEdit').attr('action', url_id)
             edit(id, true)
         });
 
@@ -291,64 +280,7 @@
                 $(element).addClass('is-valid');
             },
             submitHandler: function(form) {
-                let formData = form;
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('transaksi.store') }}",
-                    data: $(formData).serialize(),
-                    beforeSend: function() {
-                        block();
-                        $('#form .error.invalid-feedback').each(function(i) {
-                            $(this).hide();
-                        });
-                        $('#form input.is-invalid').each(function(i) {
-                            $(this).removeClass('is-invalid');
-                        });
-                    },
-                    success: function(res) {
-                        unblock();
-                        if (res.status == true) {
-                            table.ajax.reload();
-                            $('#reset').click();
-                            $('#modalAdd').modal('hide');
-                            swal(
-                                'Success!',
-                                res.message,
-                                'success'
-                            )
-                        } else {
-                            swal(
-                                'Failed!',
-                                res.message,
-                                'error'
-                            )
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        unblock();
-                        if (xhr.status == 422) {
-                            er = xhr.responseJSON.errors
-                            erlen = Object.keys(er).length
-                            for (i = 0; i < erlen; i++) {
-                                obname = Object.keys(er)[i];
-                                $('#' + obname).addClass('is-invalid');
-                                $('#err_' + obname).text(er[obname][0]);
-                                $('#err_' + obname).show();
-                            }
-                        } else {
-                            swal(
-                                'Failed!',
-                                xhr.responseJSON.message,
-                                'error'
-                            )
-                        }
-                    }
-                });
+                send_ajax('form')
             }
         });
 
@@ -368,69 +300,11 @@
                 $(element).addClass('is-valid');
             },
             submitHandler: function(form) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    }
-                });
-                var formData1 = form;
-                let url = "{{ route('transaksi.update', ':id') }}";
-                url = url.replace(':id', id);
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: $(formData1).serialize(),
-                    beforeSend: function() {
-                        block();
-                        $('#formEdit .error.invalid-feedback').each(function(i) {
-                            $(this).hide();
-                        });
-                        $('#formEdit input.is-invalid').each(function(i) {
-                            $(this).removeClass('is-invalid');
-                        });
-                    },
-                    success: function(res) {
-                        unblock();
-                        if (res.status == true) {
-                            table.ajax.reload();
-                            swal(
-                                'Success!',
-                                res.message,
-                                'success'
-                            )
-                        } else {
-                            swal(
-                                'Failed!',
-                                res.message,
-                                'error'
-                            )
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        unblock();
-                        if (xhr.status == 422) {
-                            er = xhr.responseJSON.errors
-                            erlen = Object.keys(er).length
-                            for (i = 0; i < erlen; i++) {
-                                obname = Object.keys(er)[i];
-                                $('#' + obname).addClass('is-invalid');
-                                $('#err_edit_' + obname).text(er[obname][0]);
-                                $('#err_edit_' + obname).show();
-                            }
-                        } else {
-                            swal(
-                                'Failed!',
-                                xhr.responseJSON.message,
-                                'error'
-                            )
-                        }
-                    }
-                });
+                send_ajax('formEdit')
             }
         });
 
         $('#edit_reset').click(function() {
-            let id = $(this).val();
             swal({
                 title: 'Cancel Transaksi?',
                 text: "You won't be able to revert this!",
@@ -445,44 +319,22 @@
                 customClass: 'animated tada',
             }).then(function(result) {
                 if (result.value) {
-                    let url = "{{ route('transaksi.destroy', ':id') }}";
-                    url = url.replace(':id', id);
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
+                    ajax_setup()
                     $.ajax({
-                        url: url,
+                        url: url_id,
                         method: 'DELETE',
                         success: function(result) {
                             unblock();
-                            if (result.status == true) {
-                                table.ajax.reload();
-                                $('#modalEdit').modal('hide');
-                                swal(
-                                    'Success!',
-                                    result.message,
-                                    'success'
-                                )
-                            } else {
-                                swal(
-                                    'Failed!',
-                                    result.message,
-                                    'error'
-                                )
-                            }
+                            table.ajax.reload();
+                            $('#modalEdit').modal('hide');
+                            show_alert(result.message, 'success')
                         },
                         beforeSend: function() {
                             block();
                         },
                         error: function(xhr, status, error) {
                             unblock();
-                            swal(
-                                'Failed!',
-                                xhr.responseJSON.message,
-                                'error'
-                            )
+                            handleResponseCode(xhr.responseJSON.message, 'error')
                         }
                     });
                 }
@@ -500,43 +352,34 @@
         })
 
         function edit(id, show = false) {
-            let url = "{{ route('transaksi.show', ':id') }}";
-            url = url.replace(':id', id);
             $.ajax({
-                url: url,
+                url: url_id,
                 method: 'GET',
                 success: function(result) {
                     unblock();
-                    if (result.status == true) {
-                        $('#edit_reset').val(result.data.id);
-                        $('#edit_id').val(result.data.id);
-                        $('#edit_date').val(result.data.date);
-                        $('#edit_user').val(result.data.user.name)
-                        $('#edit_from').val(result.data.from.name)
-                        $('#edit_to').val(result.data.to.name)
-                        $('#edit_amount').val(hrg(result.data.amount));
-                        $('#edit_cost').val(hrg(result.data.cost));
-                        $('#edit_revenue').val(hrg(result.data.revenue));
-                        $('#edit_desc').val(result.data.desc);
-                        if (result.data.status == 'success') {
-                            $('#edit_reset').prop('disabled', false)
-                        } else {
-                            $('#edit_reset').prop('disabled', true)
-                        }
-                        $('.title-edit').remove()
-                        $('#titleEdit').append(
-                            `<span class="badge title-edit ml-2 badge-${result.data.status == 'success' ? 'success' : 'danger'}">${result.data.number}`
-                        )
-
-                        if (show) {
-                            $('#modalEdit').modal('show');
-                        }
+                    $('#edit_reset').val(result.data.id);
+                    $('#edit_id').val(result.data.id);
+                    $('#formEdit .image_preview').attr('src', result.data.image);
+                    $('#formEdit .image_preview').show();
+                    $('#edit_date').val(result.data.date);
+                    $('#edit_user').val(result.data.user.name)
+                    $('#edit_from').val(result.data.from.name)
+                    $('#edit_to').val(result.data.to.name)
+                    $('#edit_amount').val(hrg(result.data.amount));
+                    $('#edit_cost').val(hrg(result.data.cost));
+                    $('#edit_revenue').val(hrg(result.data.revenue));
+                    $('#edit_desc').val(result.data.desc);
+                    if (result.data.status == 'success') {
+                        $('#edit_reset').prop('disabled', false)
                     } else {
-                        swal(
-                            'Failed!',
-                            result.message,
-                            'error'
-                        )
+                        $('#edit_reset').prop('disabled', true)
+                    }
+                    $('.title-edit').remove()
+                    $('#titleEdit').append(
+                        `<span class="badge title-edit ml-2 badge-${result.data.status == 'success' ? 'success' : 'danger'}">${result.data.number}`
+                    )
+                    if (show) {
+                        $('#modalEdit').modal('show');
                     }
                 },
                 beforeSend: function() {
@@ -544,50 +387,9 @@
                 },
                 error: function(xhr, status, error) {
                     unblock();
-                    swal(
-                        'Failed!',
-                        xhr.responseJSON.message,
-                        'error'
-                    )
+                    handleResponseCode(xhr)
                 }
             });
-        }
-
-        function set_from() {
-            $('#from').empty()
-            $.get("{{ route('dompet.index') }}").done(function(res) {
-                for (i = 0; i < res.data.length; i++) {
-                    let newOption = new Option(res.data[i].name, res.data[i].id);
-                    if (res.data[i].saldo < 1) {
-                        $(newOption).prop('disabled', true);
-                    }
-                    $('#from').append(newOption);
-                }
-            }).fail(function(xhr) {
-                $('#modalAdd').modal('hide')
-                swal(
-                    'Failed!',
-                    xhr.responseJSON.message,
-                    'error'
-                )
-            })
-        }
-
-        function set_to() {
-            $('#to').empty()
-            $.get("{{ route('dompet.index') }}").done(function(res) {
-                for (i = 0; i < res.data.length; i++) {
-                    let newOption = new Option(res.data[i].name, res.data[i].id);
-                    $('#to').append(newOption);
-                }
-            }).fail(function(xhr) {
-                $('#modalAdd').modal('hide')
-                swal(
-                    'Failed!',
-                    xhr.responseJSON.message,
-                    'error'
-                )
-            })
         }
     </script>
 @endpush

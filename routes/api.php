@@ -23,19 +23,19 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'active']], function () {
     Route::get('user/profile', [UserController::class, 'profile']);
     Route::put('user/profile', [UserController::class, 'profileUpdate']);
 
     Route::post('logout', [LoginController::class, 'logout']);
 
-    Route::apiResource('transaksis', TransaksiController::class)->only(['index', 'show']);
-    // Route::get('transaksis/{transaksi}', [TransaksiController::class, 'show']);
+    Route::get('transaksi-paginate', [TransaksiController::class, 'paginate'])->name('api.transaksi.paginate');
+    Route::apiResource('transaksis', TransaksiController::class)->names('api.transaksi');
 
     Route::apiResource('users', UserController::class)->only(['index', 'show']);
-    // Route::get('users', [UserController::class, 'index']);
 
-    Route::apiResource('dompets', DompetController::class)->only(['index', 'show']);
+    Route::get('dompet-paginate', [DompetController::class, 'paginate'])->name('api.dompet.paginate');
+    Route::apiResource('dompets', DompetController::class)->names('api.dompet');
 
     Route::get('statistics', [StatisticController::class, 'get']);
 });

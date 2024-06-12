@@ -14,6 +14,16 @@ class DompetResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'            => $this->id,
+            'DT_RowId'      => $this->id,
+            'name'          => $this->name,
+            'type'          => $this->type,
+            'acc_name'      => $this->acc_name,
+            'acc_number'    => $this->acc_number,
+            'saldo'         => $this->saldo,
+            'user_id'       => $this->user_id,
+            'user'          => new UserResource($this->whenLoaded('user')),
+        ];
     }
 }

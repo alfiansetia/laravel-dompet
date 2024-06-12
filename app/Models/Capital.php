@@ -15,6 +15,15 @@ class Capital extends Model
         'amount'    => 'integer',
     ];
 
+    public function getImageAttribute($value)
+    {
+        if ($value && file_exists(public_path('images/capital/' . $value))) {
+            return url('/images/capital/' . $value);
+        } else {
+            return url('/images/default/noimage.jpg');
+        }
+    }
+
     function user()
     {
         return $this->belongsTo(User::class);

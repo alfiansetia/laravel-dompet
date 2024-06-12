@@ -141,3 +141,11 @@ function hrg(x) {
 function format(number) {
     return new Intl.NumberFormat('id-ID').format(number);
 }
+
+function ajax_setup(){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        }
+    });
+}

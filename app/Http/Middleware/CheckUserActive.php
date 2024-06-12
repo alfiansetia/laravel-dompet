@@ -18,7 +18,7 @@ class CheckUserActive
     public function handle(Request $request, Closure $next)
     {
         if (auth()->user()->status != 'active') {
-            if ($request->ajax()) {
+            if ($request->ajax() || $request->expectsJson()) {
                 return response()->json(['message' => 'Your account is Nonactive!'], 403);
             }
             return redirect()->route('home')->with('error', 'Your account is Nonactive!');

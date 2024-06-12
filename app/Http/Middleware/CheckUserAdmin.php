@@ -18,7 +18,7 @@ class CheckUserAdmin
     public function handle(Request $request, Closure $next)
     {
         if (auth()->user()->role != 'admin') {
-            if ($request->ajax()) {
+            if ($request->ajax() || $request->expectsJson()) {
                 return response()->json(['message' => 'Unauthorize!'], 403);
             }
             return redirect()->route('home')->with('error', 'Unauthorize!');
