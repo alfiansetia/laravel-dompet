@@ -35,7 +35,7 @@ class TransaksiController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $data = Transaksi::query()->with('user', 'from', 'to')->latest('id');
+        $data = Transaksi::query()->with('user', 'from', 'to');
         if ($user->role == 'user') {
             $data->where('user_id', $user->id);
         }

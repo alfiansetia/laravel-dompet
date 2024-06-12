@@ -159,6 +159,9 @@
             pageLength: 10,
             lengthChange: false,
             columnDefs: [],
+            order: [
+                [0, 'desc']
+            ],
             columns: [{
                 data: 'number',
                 render: function(data, type, row, meta) {
