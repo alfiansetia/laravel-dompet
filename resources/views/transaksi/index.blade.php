@@ -267,91 +267,20 @@
             edit(id, true)
         });
 
-        $('#form').submit(function(event) {
-            event.preventDefault();
-        }).validate({
-            errorElement: 'span',
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-            },
-            highlight: function(element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
-            },
-            submitHandler: function(form) {
-                send_ajax('form')
-            }
-        });
-
-        $('#formEdit').submit(function(event) {
-            event.preventDefault();
-        }).validate({
-            errorElement: 'span',
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-            },
-            highlight: function(element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
-            },
-            submitHandler: function(form) {
-                send_ajax('formEdit')
-            }
-        });
-
         $('#edit_reset').click(function() {
-            swal({
-                title: 'Cancel Transaksi?',
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: '<i class="fa fa-thumbs-up"></i> Yes!',
-                confirmButtonAriaLabel: 'Thumbs up, Yes!',
-                cancelButtonText: '<i class="fa fa-thumbs-down"></i> No',
-                cancelButtonAriaLabel: 'Thumbs down',
-                padding: '2em',
-                animation: false,
-                customClass: 'animated tada',
-            }).then(function(result) {
-                if (result.value) {
-                    ajax_setup()
-                    $.ajax({
-                        url: url_id,
-                        method: 'DELETE',
-                        success: function(result) {
-                            unblock();
-                            table.ajax.reload();
-                            $('#modalEdit').modal('hide');
-                            show_alert(result.message, 'success')
-                        },
-                        beforeSend: function() {
-                            block();
-                        },
-                        error: function(xhr, status, error) {
-                            unblock();
-                            handleResponseCode(xhr.responseJSON.message, 'error')
-                        }
-                    });
-                }
-            })
+            delete_data()
         })
 
         $('#reset').click(function() {
-            $('#form .error.invalid-feedback').each(function(i) {
-                $(this).hide();
-            });
-            $('#form input.is-invalid').each(function(i) {
-                $(this).removeClass('is-invalid');
-            });
-            $("#from, #to").val('').change()
+            action_reset()
+        })
+
+        $('#modalAdd').on('shown.bs.modal', function() {
+            $('#amount').focus();
+        })
+
+        $('#modalEdit').on('shown.bs.modal', function() {
+            $('#edit_desc').focus();
         })
 
         function edit(id, show = false) {

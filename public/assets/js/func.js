@@ -93,7 +93,7 @@ function input_focus(input_name){
 
 function delete_batch() {
     if (selected()) {
-        Swal.fire({
+        swal({
             title: 'Are you sure?',
             text: "Data Will be Lost!",
             type: 'warning',
@@ -102,15 +102,11 @@ function delete_batch() {
             confirmButtonAriaLabel: 'Thumbs up, Yes!',
             cancelButtonText: '<i class="fa fa-thumbs-down"></i> No',
             cancelButtonAriaLabel: 'Thumbs down',
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
             padding: '2em',
+            animation: false,
             customClass: 'animated tada',
-            showClass: {
-                popup: `animated tada`
-            },
-        }).then((result) => {
-            if (result.isConfirmed) {
+        }).then(function(result) {
+            if (result.value) {
                 let form = $("#formSelected");
                 ajax_setup()
                 $.ajax({
@@ -121,9 +117,9 @@ function delete_batch() {
                         block();
                     },
                     success: function (res) {
-                        refresh = true
                         unblock();
                         table.ajax.reload();
+                        show_alert(result.message, 'success')
                         Swal.fire(
                             'Success!',
                             res.message,
@@ -141,7 +137,7 @@ function delete_batch() {
 }
 
 function delete_data(){
-    Swal.fire({
+    swal({
         title: 'Are you sure?',
         text: "Data Will be Lost!",
         type: 'warning',
@@ -150,15 +146,11 @@ function delete_data(){
         confirmButtonAriaLabel: 'Thumbs up, Yes!',
         cancelButtonText: '<i class="fa fa-thumbs-down"></i> No',
         cancelButtonAriaLabel: 'Thumbs down',
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
         padding: '2em',
+        animation: false,
         customClass: 'animated tada',
-        showClass: {
-            popup: `animated tada`
-        },
-    }).then((result) => {
-        if (result.isConfirmed) {
+    }).then(function(result) {
+        if (result.value) {
             ajax_setup();
             $.ajax({
                 type: 'DELETE',
@@ -167,16 +159,10 @@ function delete_data(){
                     block();
                 },
                 success: function (res) {
-                    refresh = true
                     unblock();
                     table.ajax.reload();
-                    Swal.fire(
-                        'Success!',
-                        res.message,
-                        'success'
-                    )
+                    show_alert(result.message, 'success')
                     $('#modalEdit').modal('hide')
-                    show_index()
                 },
                 error: function (xhr, status, error) {
                     unblock();
@@ -188,6 +174,7 @@ function delete_data(){
 }
 
 function action_reset() {
+    $('.image_preview').hide();
     clear_validate('form')
     $('#form select').val('').trigger('change');
 }
@@ -262,4 +249,48 @@ function readURL(formID, inputName) {
         };
         reader.readAsDataURL(obj[0].files[0]);
     }
+}
+
+if($('#form').length > 0){
+    $('#form').submit(function(event) {
+        event.preventDefault();
+    }).validate({
+        errorElement: 'span',
+        errorPlacement: function(error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+            $(element).addClass('is-valid');
+        },
+        submitHandler: function(form) {
+            send_ajax('form')
+        }
+    });
+}
+
+if($('#formEdit').length > 0){
+    $('#formEdit').submit(function(event) {
+        event.preventDefault();
+    }).validate({
+        errorElement: 'span',
+        errorPlacement: function(error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.form-group').append(error);
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+            $(element).addClass('is-valid');
+        },
+        submitHandler: function(form) {
+            send_ajax('formEdit')
+        }
+    });
 }

@@ -60,8 +60,11 @@
                     </div>
                     <div class="form-group mb-2">
                         <label class="control-label" for="image">Bukti :</label>
-                        <input class="form-control file-upload-input" name="image" type="file" id="image"
-                            onchange="readURL('form', 'image');" accept="image/jpeg, image/png, image/jpg">
+                        <div class="custom-file mb-2">
+                            <input type="file" name="image" class="custom-file-input" id="image"
+                                onchange="readURL('form', 'image');" accept="image/jpeg, image/png, image/jpg">
+                            <label class="custom-file-label" for="image">Choose file</label>
+                        </div>
                         <small class="form-text text-muted">Max Size 3MB</small>
                         <span class="error invalid-feedback err_image"></span>
                         <br><img class="image_preview mt-1" src="#" style="display: none;max-height: 750px" />
@@ -97,9 +100,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
                     <div class="form-group">
-                        <label class="control-label" for="edit_user">User :</label>
+                        <label class="control-label" for="edit_user">Input By :</label>
                         <input type="text" class="form-control" id="edit_user" readonly>
                     </div>
                     <div class="form-group">
@@ -132,9 +134,12 @@
                         <span class="error invalid-feedback err_desc" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
-                        <label class="control-label" for="image">Bukti :</label>
-                        <input class="form-control file-upload-input" name="image" type="file" id="image"
-                            onchange="readURL('formEdit', 'image');" accept="image/jpeg, image/png, image/jpg">
+                        <label class="control-label" for="edit_image">Image :</label>
+                        <div class="custom-file mb-2">
+                            <input type="file" name="image" class="custom-file-input" id="edit_image"
+                                onchange="readURL('formEdit', 'image');" accept="image/jpeg, image/png, image/jpg">
+                            <label class="custom-file-label" for="edit_image">Choose file</label>
+                        </div>
                         <small class="form-text text-muted">Max Size 3MB</small>
                         <span class="error invalid-feedback err_image"></span>
                         <br><img class="image_preview mt-1" src="#"

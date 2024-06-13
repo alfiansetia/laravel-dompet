@@ -94,6 +94,7 @@
 
     <script src="{{ asset('plugins/sweetalerts/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalerts/custom-sweetalert.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
 
 
     <script src="{{ asset('plugins/blockui/jquery.blockUI.min.js') }}"></script>
@@ -124,6 +125,8 @@
             $('body').tooltip({
                 selector: '[data-toggle="tooltip"]'
             });
+
+            bsCustomFileInput.init()
         });
 
         feather.replace();
