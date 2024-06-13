@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CapitalController;
 use App\Http\Controllers\Api\DompetController;
+use App\Http\Controllers\Api\ExpenditureController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\StatisticController;
@@ -39,13 +40,15 @@ Route::group(['middleware' => ['auth:sanctum', 'active']], function () {
         Route::get('transaksi-paginate', [TransaksiController::class, 'paginate'])->name('api.transaksi.paginate');
         Route::apiResource('transaksis', TransaksiController::class)->names('api.transaksi');
 
+        Route::get('capital-paginate', [CapitalController::class, 'paginate'])->name('api.capital.paginate');
+        Route::apiResource('capitals', CapitalController::class)->names('api.capital');
+
+        Route::get('expenditure-paginate', [ExpenditureController::class, 'paginate'])->name('api.capital.paginate');
+        Route::apiResource('expenditures', ExpenditureController::class)->names('api.expenditure');
+
         Route::get('dompet-paginate', [DompetController::class, 'paginate'])->name('api.dompet.paginate');
         Route::apiResource('dompets', DompetController::class)->names('api.dompet');
         Route::delete('dompets', [DompetController::class, 'destroyBatch'])->name('api.dompet.destroy.batch');
-
-        Route::get('capital-paginate', [CapitalController::class, 'paginate'])->name('api.capital.paginate');
-        Route::apiResource('capitals', CapitalController::class)->names('api.capital');
-        Route::delete('capitals', [CapitalController::class, 'destroyBatch'])->name('api.capital.destroy.batch');
 
         Route::get('user-paginate', [UserController::class, 'paginate'])->name('api.user.paginate');
         Route::apiResource('users', UserController::class)->names('api.user');
