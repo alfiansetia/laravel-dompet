@@ -239,6 +239,8 @@ function send_ajax(formID) {
                 res.message,
                 'success'
             )
+            $('#modalEdit').modal('hide');
+            $('#modalAdd').modal('hide');
         },
         error: function (xhr, status, error) {
             unblock();
