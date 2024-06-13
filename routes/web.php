@@ -40,28 +40,20 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/home/getdata', [HomeController::class, 'getData'])->name('home.get.data');
     Route::get('/home/getchart', [HomeController::class, 'getChart'])->name('home.get.chart');
 
-    Route::get('user-paginate', [UserController::class, 'paginate'])->name('user.paginate');
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::post('user/profile', [UserController::class, 'profileUpdate'])->name('user.profile.update');
     Route::get('user/password', [UserController::class, 'profile'])->name('user.password');
     Route::post('user/password', [UserController::class, 'passwordUpdate'])->name('user.password.update');
-    Route::resource('user', UserController::class)->only(['index', 'store', 'show', 'update']);
-    Route::delete('user', [UserController::class, 'destroy'])->name('user.destroy');
 
     Route::get('report', [ReportController::class, 'index'])->name('report.index');
     Route::get('report/get-data', [ReportController::class, 'getData'])->name('report.data');
     Route::get('report/get-date', [ReportController::class, 'getDate'])->name('report.date');
 
-    Route::get('dompet-paginate', [DompetController::class, 'paginate'])->name('dompet.paginate');
-    Route::resource('dompet', DompetController::class)->only(['index', 'store', 'show', 'update']);
-    Route::delete('dompet', [DompetController::class, 'destroy'])->name('dompet.destroy');
-
-    // Route::get('transaksi-paginate', [TransaksiController::class, 'paginate'])->name('transaksi.paginate');
-    Route::resource('transaksi', TransaksiController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-
-    Route::resource('capital', CapitalController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
-
-    Route::resource('expenditure', ExpenditureController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::get('dompet', [DompetController::class, 'index'])->name('dompet.index');
+    Route::get('transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::get('capital', [CapitalController::class, 'index'])->name('capital.index');
+    Route::get('expenditure', [ExpenditureController::class, 'index'])->name('expenditure.index');
+    Route::get('user', [UserController::class, 'index'])->name('user.index');
 
     Route::resource('comp', CompController::class)->only(['index', 'store']);
 

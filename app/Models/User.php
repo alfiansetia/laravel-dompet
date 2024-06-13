@@ -59,4 +59,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Dompet::class);
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        if (isset($filters['name'])) {
+            $query->where('name', 'like', '%' . $filters['name'] . '%');
+        }
+        if (isset($filters['email'])) {
+            $query->where('email', 'like', '%' . $filters['email'] . '%');
+        }
+    }
 }

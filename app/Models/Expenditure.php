@@ -33,4 +33,17 @@ class Expenditure extends Model
     {
         return $this->belongsTo(Dompet::class);
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        if (isset($filters['number'])) {
+            $query->where('number', 'like', '%' . $filters['number'] . '%');
+        }
+        if (isset($filters['user_id'])) {
+            $query->where('user_id',  $filters['user_id']);
+        }
+        if (isset($filters['status'])) {
+            $query->where('status',  $filters['status']);
+        }
+    }
 }

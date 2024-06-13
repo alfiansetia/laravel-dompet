@@ -23,7 +23,7 @@ class UserController extends Controller
         if ($request->filled('limit') && is_numeric($request->limit) && $request->limit > 0) {
             $limit = $request->limit;
         }
-        $data = User::paginate($limit)->withQueryString();
+        $data = User::filter($request->only(['name', 'email']))->paginate($limit)->withQueryString();
         return UserResource::collection($data);
     }
 

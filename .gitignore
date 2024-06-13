@@ -18,3 +18,5 @@ yarn-error.log
 /.vscode
 /public/images/transaksi
 /public/images/dompet
+/public/images/capital
+/public/images/expenditure

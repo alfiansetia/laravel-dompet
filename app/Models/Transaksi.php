@@ -39,4 +39,23 @@ class Transaksi extends Model
     {
         return $this->belongsTo(Dompet::class, 'to_id');
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+        if (isset($filters['number'])) {
+            $query->where('number', 'like', '%' . $filters['number'] . '%');
+        }
+        if (isset($filters['user_id'])) {
+            $query->where('user_id',  $filters['user_id']);
+        }
+        if (isset($filters['from_id'])) {
+            $query->where('from_id',  $filters['from_id']);
+        }
+        if (isset($filters['to_id'])) {
+            $query->where('to_id',  $filters['to_id']);
+        }
+        if (isset($filters['status'])) {
+            $query->where('status',  $filters['status']);
+        }
+    }
 }

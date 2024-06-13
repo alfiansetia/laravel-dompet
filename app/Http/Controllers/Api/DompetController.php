@@ -25,7 +25,7 @@ class DompetController extends Controller
             $limit = $request->limit;
         }
         $user = auth()->user();
-        $data = Dompet::query();
+        $data = Dompet::query()->filter($request->only(['name', 'user_id']));
         if ($user->role != 'admin') {
             $data->where('user_id', $user->id);
         }

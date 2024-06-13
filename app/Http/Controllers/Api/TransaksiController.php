@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TransaksiResource;
 use App\Models\Dompet;
 use App\Models\Transaksi;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +27,7 @@ class TransaksiController extends Controller
         if ($request->filled('limit') && is_numeric($request->limit) && $request->limit > 0) {
             $limit = $request->limit;
         }
-        $data = Transaksi::with('user', 'from', 'to')->paginate($limit)->withQueryString();
+        $data = Transaksi::filter($request->only(['number', 'user_id', 'from_id', 'to_id', 'status']))->with('user', 'from', 'to')->paginate($limit)->withQueryString();
         return TransaksiResource::collection($data);
     }
 
@@ -110,7 +109,7 @@ class TransaksiController extends Controller
             DB::rollback();
             return response()->json([
                 'message'   => 'Transaksi Gagal! : ' . $e->getMessage(),
-                'data'      => '',
+                'data'      => new TransaksiResource($transaksi),
             ], 500);
         }
     }
@@ -145,10 +144,10 @@ class TransaksiController extends Controller
     {
         $transaksi = $transaksi->load(['user', 'from', 'to']);
         if ($transaksi->status == 'cancel') {
-            throw new Exception('Transaksi already cancel!');
+            return $this->handle_unauthorize('Transaksi already cancel!');
         }
         if ($transaksi->to->saldo < ($transaksi->amount + $transaksi->cost - $transaksi->revenue)) {
-            throw new Exception('Saldo tujuan untuk pembatalan tidak cukup!');
+            return $this->handle_unauthorize('Saldo untuk pembatalan tidak cukup!');
         }
         DB::beginTransaction();
         try {
