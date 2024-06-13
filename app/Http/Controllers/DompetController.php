@@ -16,14 +16,6 @@ class DompetController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $user = auth()->user();
-            $data = Dompet::query();
-            if ($user->role != 'admin') {
-                $data->where('user_id', $user->id);
-            }
-            return DataTables::of($data->with('user'))->toJson();
-        }
         return view('dompet.index');
     }
 }
