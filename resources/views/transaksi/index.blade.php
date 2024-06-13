@@ -60,7 +60,6 @@
         integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <script src="{{ asset('assets/js/func.js') }}"></script>
     <script>
         var url_index = "{{ route('api.transaksi.index') }}";
         var url_id;
@@ -324,4 +323,5 @@
             });
         }
     </script>
+    <script src="{{ asset('assets/js/func.js') }}"></script>
 @endpush
