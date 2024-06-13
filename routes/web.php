@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CapitalController;
 use App\Http\Controllers\CompController;
 use App\Http\Controllers\DatabaseBackupController;

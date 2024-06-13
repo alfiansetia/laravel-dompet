@@ -17,7 +17,7 @@
                         <label class="control-label" for="name">Name :</label>
                         <input type="text" name="name" class="form-control maxlength" id="name"
                             placeholder="Please Enter Name" minlength="3" maxlength="25" required>
-                        <span id="err_name" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_name" style="display: hide;"></span>
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="type"></i>Type :</label>
@@ -25,26 +25,26 @@
                             <option value="cash">Cash</option>
                             <option value="ewallet">Ewallet</option>
                         </select>
-                        <span id="err_type" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_type" style="display: hide;"></span>
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="acc_name">Account Name :</label>
                         <input type="text" name="acc_name" class="form-control maxlength" id="acc_name"
                             placeholder="Please Enter Account Name" minlength="3" maxlength="25" required>
-                        <span id="err_acc_name" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_acc_name" style="display: hide;"></span>
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="acc_number">Account Number :</label>
                         <input type="text" name="acc_number" class="form-control maxlength" id="acc_number"
                             placeholder="Please Enter Account Name" minlength="3" maxlength="25" required>
-                        <span id="err_acc_number" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_acc_number" style="display: hide;"></span>
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="user"></i>Owner :</label>
                         <select name="user" id="user" class="form-control" style="width: 100%;" required>
                             <option value="">Select User</option>
                         </select>
-                        <span id="err_user" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_user" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
                         <label class="control-label" for="image">Image :</label>
@@ -99,26 +99,26 @@
                             <option value="cash">Cash</option>
                             <option value="ewallet">Ewallet</option>
                         </select>
-                        <span id="err_edit_type" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_type" style="display: hide;"></span>
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="edit_acc_name">Account Name :</label>
                         <input type="text" name="acc_name" class="form-control maxlength" id="edit_acc_name"
                             placeholder="Please Enter Account Name" minlength="3" maxlength="25" required>
-                        <span id="err_edit_acc_name" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_acc_name" style="display: hide;"></span>
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="edit_acc_number">Account Number :</label>
                         <input type="text" name="acc_number" class="form-control maxlength" id="edit_acc_number"
                             placeholder="Please Enter Account Name" minlength="3" maxlength="25" required>
-                        <span id="err_edit_acc_number" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_acc_number" style="display: hide;"></span>
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="edit_user"></i>Owner :</label>
                         <select name="user" id="edit_user" class="form-control" style="width: 100%;" required>
                             <option value="">Select User</option>
                         </select>
-                        <span id="err_edit_user" class="error invalid-feedback" style="display: hide;"></span>
+                        <span class="error invalid-feedback err_user" style="display: hide;"></span>
                     </div>
                     <div class="form-group mb-2">
                         <label class="control-label" for="edit_image">Image :</label>

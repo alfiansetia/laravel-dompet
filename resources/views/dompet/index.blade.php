@@ -100,7 +100,6 @@
         var table = $('#table').DataTable({
             processing: true,
             serverSide: true,
-            rowId: 'id',
             ajax: url_index,
             dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
                 "<'table-responsive'tr>" +
@@ -227,6 +226,7 @@
         multiCheck(table);
 
         $('#edit_reset').click(function() {
+            clear_validate('formEdit')
             edit(id, false)
         })
 
