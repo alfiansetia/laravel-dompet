@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth:sanctum', 'active']], function () {
 
     Route::get('dompet-paginate', [DompetController::class, 'paginate'])->name('api.dompet.paginate');
     Route::apiResource('dompets', DompetController::class)->names('api.dompet');
+    Route::delete('dompets', [DompetController::class, 'destroyBatch'])->name('api.dompet.destroy.batch');
 
     Route::get('statistics', [StatisticController::class, 'get']);
 });

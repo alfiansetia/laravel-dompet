@@ -47,23 +47,27 @@
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/table/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
-
     <script src="{{ asset('plugins/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-maxlength/custom-bs-maxlength.js') }}"></script>
 
     <script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js"
         integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+        var url_index = "{{ route('api.dompet.index') }}";
+        var url_id;
+        var id;
+        var perpage = 20;
+
         $("#type, #edit_type").select2({
             theme: "bootstrap4",
         });
         var perpage = 20;
+
         $("#user, #edit_user").select2({
             theme: "bootstrap4",
             ajax: {
@@ -97,7 +101,7 @@
             processing: true,
             serverSide: true,
             rowId: 'id',
-            ajax: "{{ route('dompet.index') }}",
+            ajax: url_index,
             dom: "<'dt--top-section'<'row'<'col-sm-12 col-md-6 d-flex justify-content-md-start justify-content-center'B><'col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center mt-md-0 mt-3'f>>>" +
                 "<'table-responsive'tr>" +
                 "<'dt--bottom-section d-sm-flex justify-content-sm-between text-center'<'dt--pages-count  mb-sm-0 mb-3'i><'dt--pagination'p>>",
@@ -180,7 +184,6 @@
                 },
                 action: function(e, dt, node, config) {
                     $('#modalAdd').modal('show');
-                    $('#name').focus();
                 }
             }, {
                 text: '<i class="fas fa-trash"></i>Del',
@@ -190,7 +193,7 @@
                     'title': 'Delete Selected Data'
                 },
                 action: function(e, dt, node, config) {
-                    deleteData()
+                    delete_batch()
                 }
             }, {
                 extend: "colvis",
@@ -223,315 +226,65 @@
 
         multiCheck(table);
 
-        var id;
-
         $('#edit_reset').click(function() {
-            id = $(this).val();
             edit(id, false)
         })
 
         $('#table tbody').on('click', 'tr td:not(:first-child)', function() {
-            $('#formEdit .error.invalid-feedback').each(function(i) {
-                $(this).hide();
-            });
-            $('#formEdit input.is-invalid').each(function(i) {
-                $(this).removeClass('is-invalid');
-            });
+            $('#formEdit')[0].reset()
+            clear_validate('formEdit')
             id = table.row(this).id()
+            url_id = url_index + "/" + id
+            $('#formEdit').attr('action', url_id)
             edit(id, true)
         });
 
-        $('#formEdit').submit(function(event) {
-            event.preventDefault();
-        }).validate({
-            errorElement: 'span',
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-            },
-            highlight: function(element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
-            },
-            submitHandler: function(form) {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    }
-                });
-                var formData1 = form;
-                let url = "{{ route('dompet.update', ':id') }}";
-                url = url.replace(':id', id);
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: $(formData1).serialize(),
-                    beforeSend: function() {
-                        block();
-                        $('#formEdit .error.invalid-feedback').each(function(i) {
-                            $(this).hide();
-                        });
-                        $('#formEdit input.is-invalid').each(function(i) {
-                            $(this).removeClass('is-invalid');
-                        });
-                    },
-                    success: function(res) {
-                        unblock();
-                        if (res.status == true) {
-                            table.ajax.reload();
-                            $('#reset').click();
-                            swal(
-                                'Success!',
-                                res.message,
-                                'success'
-                            )
-                        } else {
-                            swal(
-                                'Failed!',
-                                res.message,
-                                'error'
-                            )
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        unblock();
-                        if (xhr.status == 422) {
-                            er = xhr.responseJSON.errors
-                            erlen = Object.keys(er).length
-                            for (i = 0; i < erlen; i++) {
-                                obname = Object.keys(er)[i];
-                                $('#' + obname).addClass('is-invalid');
-                                $('#err_edit_' + obname).text(er[obname][0]);
-                                $('#err_edit_' + obname).show();
-                            }
-                        } else {
-                            swal(
-                                'Failed!',
-                                xhr.responseJSON.message,
-                                'error'
-                            )
-                        }
-                    }
-                });
-            }
-        });
-
         $('#reset').click(function() {
-            $('#form .error.invalid-feedback').each(function(i) {
-                $(this).hide();
-            });
-            $('#form input.is-invalid').each(function(i) {
-                $(this).removeClass('is-invalid');
-            });
-            $('#user').val('').change()
+            action_reset()
             $('#type').val('cash').change()
         })
 
-        $('#form').submit(function(event) {
-            event.preventDefault();
-        }).validate({
-            errorElement: 'span',
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.form-group').append(error);
-            },
-            highlight: function(element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-                $(element).addClass('is-valid');
-            },
-            submitHandler: function(form) {
-                let formData = form;
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('dompet.store') }}",
-                    data: $(formData).serialize(),
-                    beforeSend: function() {
-                        block();
-                        $('#form .error.invalid-feedback').each(function(i) {
-                            $(this).hide();
-                        });
-                        $('#form input.is-invalid').each(function(i) {
-                            $(this).removeClass('is-invalid');
-                        });
-                    },
-                    success: function(res) {
-                        unblock();
-                        if (res.status == true) {
-                            table.ajax.reload();
-                            $('#reset').click();
-                            swal(
-                                'Success!',
-                                res.message,
-                                'success'
-                            )
-                        } else {
-                            swal(
-                                'Failed!',
-                                res.message,
-                                'error'
-                            )
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        unblock();
-                        if (xhr.status == 422) {
-                            er = xhr.responseJSON.errors
-                            erlen = Object.keys(er).length
-                            for (i = 0; i < erlen; i++) {
-                                obname = Object.keys(er)[i];
-                                $('#' + obname).addClass('is-invalid');
-                                $('#err_' + obname).text(er[obname][0]);
-                                $('#err_' + obname).show();
-                            }
-                        } else {
-                            swal(
-                                'Failed!',
-                                xhr.responseJSON.message,
-                                'error'
-                            )
-                        }
-                    }
-                });
-            }
-        });
+        $('#modalAdd').on('shown.bs.modal', function() {
+            $('#name').focus();
+        })
+
+        $('#modalEdit').on('shown.bs.modal', function() {
+            $('#edit_name').focus();
+        })
 
         function edit(id, show = false) {
-            let url = "{{ route('dompet.show', ':id') }}";
-            url = url.replace(':id', id);
             $.ajax({
-                url: url,
+                url: url_id,
                 method: 'GET',
                 success: function(result) {
                     unblock();
-                    if (result.status == true) {
-                        $('#edit_reset').val(result.data.id);
-                        $('#edit_id').val(result.data.id);
-                        $('#edit_name').val(result.data.name);
-                        $('#edit_type').val(result.data.type).change();
-                        $('#edit_acc_name').val(result.data.acc_name);
-                        $('#edit_acc_number').val(result.data.acc_number);
-                        if (result.data.user_id == null) {
-                            $('#edit_user').val('').change();
-                        } else {
-                            let newOption = new Option(result.data.user.name, result.data.user_id, true,
-                                true);
-                            $('#edit_user').append(newOption).trigger('change');
-                        }
-                        if (show) {
-                            $('#modalEdit').modal('show');
-                        }
+                    $('#formEdit .image_preview').attr('src', result.data.image);
+                    $('#formEdit .image_preview').show();
+                    $('#edit_name').val(result.data.name);
+                    $('#edit_type').val(result.data.type).change();
+                    $('#edit_acc_name').val(result.data.acc_name);
+                    $('#edit_acc_number').val(result.data.acc_number);
+                    if (result.data.user_id == null) {
+                        $('#edit_user').val('').change();
                     } else {
-                        swal(
-                            'Failed!',
-                            result.message,
-                            'error'
-                        )
+                        let newOption = new Option(result.data.user.name, result.data.user_id, true,
+                            true);
+                        $('#edit_user').append(newOption).trigger('change');
                     }
+                    if (show) {
+                        $('#modalEdit').modal('show');
+                    }
+
                 },
                 beforeSend: function() {
                     block();
                 },
                 error: function(xhr, status, error) {
                     unblock();
-                    swal(
-                        'Failed!',
-                        xhr.responseJSON.message,
-                        'error'
-                    )
+                    handleResponseCode(xhr)
                 }
             });
         }
-
-        function deleteData() {
-            if (selected()) {
-                swal({
-                    title: 'Delete Selected Data?',
-                    text: "You won't be able to revert this!",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: '<i class="fa fa-thumbs-up"></i> Yes!',
-                    confirmButtonAriaLabel: 'Thumbs up, Yes!',
-                    cancelButtonText: '<i class="fa fa-thumbs-down"></i> No',
-                    cancelButtonAriaLabel: 'Thumbs down',
-                    padding: '2em',
-                    animation: false,
-                    customClass: 'animated tada',
-                }).then(function(result) {
-                    if (result.value) {
-                        let form = $("#formSelected");
-                        $.ajaxSetup({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            }
-                        });
-                        $.ajax({
-                            type: 'DELETE',
-                            url: "{{ route('dompet.destroy') }}",
-                            data: $(form).serialize(),
-                            beforeSend: function() {
-                                block();
-                            },
-                            success: function(res) {
-                                unblock();
-                                if (res.status == true) {
-                                    table.ajax.reload();
-                                    swal(
-                                        'Success!',
-                                        res.message,
-                                        'success'
-                                    )
-                                } else {
-                                    swal(
-                                        'Failed!',
-                                        res.message,
-                                        'error'
-                                    )
-                                }
-                            },
-                            error: function(xhr, status, error) {
-                                unblock();
-                                if (xhr.status == 500) {
-                                    swal(
-                                        'Failed!',
-                                        'Server Error',
-                                        'error'
-                                    )
-                                } else {
-                                    swal(
-                                        'Failed!',
-                                        xhr.responseJSON.message,
-                                        'error'
-                                    )
-                                }
-                            }
-                        });
-                    }
-                })
-            }
-        }
-
-        function selected() {
-            let id = $('input[name="id[]"]:checked').length;
-            if (id <= 0) {
-                swal({
-                    title: 'Failed!',
-                    text: "No Selected Data!",
-                    type: 'error',
-                })
-                return false
-            }
-            return true
-        }
     </script>
+    <script src="{{ asset('assets/js/func.js') }}"></script>
 @endpush

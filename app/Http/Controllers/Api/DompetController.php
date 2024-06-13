@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DompetResource;
 use App\Models\Dompet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Yajra\DataTables\Facades\DataTables;
 
 class DompetController extends Controller
@@ -56,14 +57,26 @@ class DompetController extends Controller
             'acc_name'      => 'required|max:50|min:3',
             'acc_number'    => 'required|max:50|min:3',
             'user'          => 'required|exists:users,id',
+            'image'         => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
         ]);
+        $name = $request->name;
+        $img = null;
+        if ($files = $request->file('image')) {
+            $destinationPath = public_path('/images/dompet/');
+            if (!file_exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 755, true);
+            }
+            $img = 'dompet_' . $name . '_' . date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $img);
+        }
 
         $dompet = Dompet::create([
-            'name'          => $request->name,
+            'name'          => $name,
             'type'          => $request->type,
             'acc_name'      => $request->acc_name,
             'acc_number'    => $request->acc_number,
             'user_id'       => $request->user,
+            'image'         => $img,
         ]);
         return response()->json(['status' => true, 'message' => 'Success insert data!', 'data' => new DompetResource($dompet)]);
     }
@@ -76,19 +89,39 @@ class DompetController extends Controller
             'acc_name'      => 'required|max:50|min:3',
             'acc_number'    => 'required|max:50|min:3',
             'user'          => 'required|exists:users,id',
+            'image'         => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
         ]);
+        $name = $request->name;
+        $img = $dompet->getRawOriginal('image');
+        if ($files = $request->file('image')) {
+            $destinationPath = public_path('/images/dompet/');
+            if (!empty($img) && file_exists($destinationPath . $img)) {
+                File::delete($destinationPath . $img);
+            }
+            if (!file_exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 755, true);
+            }
+            $img = 'dompet_' . $name . '_' . date('YmdHis') . "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $img);
+        }
         $dompet->update([
-            'name'          => $request->name,
+            'name'          => $name,
             'type'          => $request->type,
             'acc_name'      => $request->acc_name,
             'acc_number'    => $request->acc_number,
             'user_id'       => $request->user,
+            'image'         => $img,
         ]);
         return response()->json(['status' => true, 'message' => 'Success update data!', 'data' => new DompetResource($dompet)]);
     }
 
     public function destroy(Dompet $dompet)
     {
+        $img = $dompet->getRawOriginal('image');
+        $destinationPath = public_path('/images/dompet/');
+        if (!empty($img) && file_exists($destinationPath . $img)) {
+            File::delete($destinationPath . $img);
+        }
         $dompet->delete();
         return response()->json(['status' => true, 'message' => 'Success delete data!', 'data' => new DompetResource($dompet)]);
     }
@@ -103,6 +136,11 @@ class DompetController extends Controller
         foreach ($request->id as $id) {
             $dompet = Dompet::find($id);
             if ($dompet) {
+                $img = $dompet->getRawOriginal('image');
+                $destinationPath = public_path('/images/dompet/');
+                if (!empty($img) && file_exists($destinationPath . $img)) {
+                    File::delete($destinationPath . $img);
+                }
                 $dompet->delete();
                 $deleted++;
             }

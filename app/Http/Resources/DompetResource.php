@@ -24,6 +24,7 @@ class DompetResource extends JsonResource
             'saldo'         => $this->saldo,
             'user_id'       => $this->user_id,
             'user'          => new UserResource($this->whenLoaded('user')),
+            'image'         => $this->image,
         ];
     }
 }

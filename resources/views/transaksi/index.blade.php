@@ -288,8 +288,6 @@
                 method: 'GET',
                 success: function(result) {
                     unblock();
-                    $('#edit_reset').val(result.data.id);
-                    $('#edit_id').val(result.data.id);
                     $('#formEdit .image_preview').attr('src', result.data.image);
                     $('#formEdit .image_preview').show();
                     $('#edit_date').val(result.data.date);
