@@ -164,11 +164,7 @@
                 data: 'user_id',
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
-                        if (data == null) {
-                            return ''
-                        } else {
-                            return row.user.name
-                        }
+                        return data != null ? row.user.name : ''
                     } else {
                         return data
                     }

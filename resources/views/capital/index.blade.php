@@ -147,7 +147,7 @@
                 data: 'date',
             }, {
                 title: "User",
-                data: 'user.name',
+                data: 'user_id',
                 visible: false,
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
@@ -158,7 +158,14 @@
                 }
             }, {
                 title: "Dompet",
-                data: 'dompet.name',
+                data: 'dompet_id',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return data != null ? row.dompet.name : ''
+                    } else {
+                        return data
+                    }
+                }
             }, {
                 title: "Amount",
                 data: 'amount',

@@ -173,7 +173,7 @@
             }, {
                 data: 'date',
             }, {
-                data: 'user.name',
+                data: 'user_id',
                 visible: false,
                 render: function(data, type, row, meta) {
                     if (type == 'display') {
@@ -183,9 +183,23 @@
                     }
                 }
             }, {
-                data: 'from.name',
+                data: 'from_id',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return data != null ? row.from.name : ''
+                    } else {
+                        return data
+                    }
+                }
             }, {
-                data: 'to.name',
+                data: 'to_id',
+                render: function(data, type, row, meta) {
+                    if (type == 'display') {
+                        return data != null ? row.to.name : ''
+                    } else {
+                        return data
+                    }
+                }
             }, {
                 data: 'amount',
                 render: function(data, type, row, meta) {
