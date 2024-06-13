@@ -87,7 +87,7 @@
                 multiple: true,
                 ajax: {
                     delay: 1000,
-                    url: "{{ route('user.paginate') }}",
+                    url: "{{ route('api.user.paginate') }}",
                     data: function(params) {
                         return {
                             name: params.term || '',
