@@ -13,6 +13,8 @@ class Capital extends Model
 
     protected $casts = [
         'amount'    => 'integer',
+        'user_id'   => 'integer',
+        'dompet_id' => 'integer',
     ];
 
     public function getImageAttribute($value)

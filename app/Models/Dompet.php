@@ -12,6 +12,7 @@ class Dompet extends Model
 
     protected $casts = [
         'saldo'    => 'integer',
+        'user_id'  => 'integer',
     ];
 
     public function getImageAttribute($value)

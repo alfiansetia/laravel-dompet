@@ -14,6 +14,9 @@ class Transaksi extends Model
         'amount'    => 'integer',
         'cost'      => 'integer',
         'revenue'   => 'integer',
+        'user_id'   => 'integer',
+        'from_id'   => 'integer',
+        'to_id'     => 'integer',
     ];
 
     public function getImageAttribute($value)
