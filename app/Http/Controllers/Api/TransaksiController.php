@@ -27,7 +27,7 @@ class TransaksiController extends Controller
         if ($request->filled('limit') && is_numeric($request->limit) && $request->limit > 0) {
             $limit = $request->limit;
         }
-        $data = Transaksi::filter($request->only(['number', 'user_id', 'from_id', 'to_id', 'status']))->with('user', 'from', 'to')->paginate($limit)->withQueryString();
+        $data = Transaksi::filter($request->only(['number', 'user_id', 'from_id', 'to_id', 'status', 'order_id_asc', 'order_id_desc']))->with('user', 'from', 'to')->paginate($limit)->withQueryString();
         return TransaksiResource::collection($data);
     }
 

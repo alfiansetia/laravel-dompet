@@ -57,5 +57,11 @@ class Transaksi extends Model
         if (isset($filters['status'])) {
             $query->where('status',  $filters['status']);
         }
+        if (isset($filters['order_id_asc'])) {
+            $query->orderBy('id', 'asc');
+        }
+        if (isset($filters['order_id_desc'])) {
+            $query->orderBy('id', 'desc');
+        }
     }
 }
