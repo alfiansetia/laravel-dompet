@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth:sanctum', 'active']], function () {
 
     Route::get('profile', [ProfileController::class, 'index'])->name('api.profile.index');
     Route::get('statistics', [StatisticController::class, 'get']);
+    Route::get('chart-revenue-all', [StatisticController::class, 'chart_revenue_all'])->name('api.chart.revenue.all');
 
     Route::group(['middleware' => ['active']], function () {
 

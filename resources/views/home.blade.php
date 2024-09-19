@@ -67,6 +67,32 @@
                 </div>
             </div>
 
+            <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
+                <div class="widget widget-chart-one">
+                    <div class="widget-heading">
+                        <h5 class="">Revenue Graph All Time</h5>
+                        <div class="task-action">
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" href="#" role="button" id="pendingTask"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i data-feather="more-horizontal"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="pendingTask"
+                                    style="will-change: transform;">
+                                    <a class="dropdown-item" href="javascript:void(0);">Weekly</a>
+                                    <a class="dropdown-item" href="javascript:void(0);">Monthly</a>
+                                    <a class="dropdown-item" href="javascript:void(0);">Yearly</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget-content">
+                        <div id="revenueAll"></div>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12 layout-spacing">
                 <div class="widget widget-card-four">
                     <div class="widget-content">
@@ -111,6 +137,7 @@
                 </div>
 
             </div>
+
         </div>
     </div>
 @endsection
@@ -324,9 +351,21 @@
         );
         chart.render();
 
+        var chart_all = new ApexCharts(
+            document.querySelector("#revenueAll"),
+            options1
+        );
+        chart_all.render();
+
         function get_chart() {
             $.get("{{ route('home.get.chart') }}").done(function(res) {
                 updateChartData(res.data, res.labels)
+            }).fail(function(xhr) {
+                console.log(xhr);
+            })
+
+            $.get("{{ route('api.chart.revenue.all') }}").done(function(res) {
+                updateChartDataAll(res.data, res.labels)
             }).fail(function(xhr) {
                 console.log(xhr);
             })
@@ -371,6 +410,24 @@
                 }
             });
             chart.updateSeries([{
+                name: 'Revenue',
+                data: newData
+            }]);
+        }
+
+        function updateChartDataAll(newData, newLabels) {
+            chart_all.updateOptions({
+                xaxis: {
+                    categories: []
+                }
+            });
+            chart_all.updateSeries([]);
+            chart_all.updateOptions({
+                xaxis: {
+                    categories: newLabels
+                }
+            });
+            chart_all.updateSeries([{
                 name: 'Revenue',
                 data: newData
             }]);
