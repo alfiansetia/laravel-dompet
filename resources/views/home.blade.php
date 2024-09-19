@@ -240,24 +240,28 @@
             }],
             labels: [''],
             xaxis: {
+                show: false,
+                labels: {
+                    show: false
+                },
                 axisBorder: {
-                    show: false
-                },
-                axisTicks: {
-                    show: false
-                },
-                crosshairs: {
                     show: true
                 },
-                labels: {
-                    offsetX: 0,
-                    offsetY: 5,
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: 'Nunito, sans-serif',
-                        cssClass: 'apexcharts-xaxis-title',
-                    },
+                axisTicks: {
+                    show: true
                 }
+                // crosshairs: {
+                //     show: true
+                // },
+                // labels: {
+                //     offsetX: 0,
+                //     offsetY: 5,
+                //     style: {
+                //         fontSize: '12px',
+                //         fontFamily: 'Nunito, sans-serif',
+                //         cssClass: 'apexcharts-xaxis-title',
+                //     },
+                // }
             },
             yaxis: {
                 labels: {
